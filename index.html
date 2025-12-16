@@ -9,7 +9,7 @@
     <!-- Indlæs Lucide ikoner -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Google Font: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=100..900&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-color: #0d9488; /* Teal 600 - Matcher logoets tone */
@@ -583,7 +583,8 @@
     <script type="module">
         // --- Firebase Imports ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInWithCustomToken, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        // Her opdateres 'signInWithPopup' til 'signInWithRedirect' og tilhørende 'getRedirectResult'
+        import { getAuth, signInWithCustomToken, signInWithRedirect, getRedirectResult, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection, query, orderBy, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         
@@ -633,9 +634,12 @@
                         .catch(err => console.error("Anonymous auth failed:", err));
                 }
                 
-                // 2. Lyt efter Auth-statusændringer (vigtig for Admin-tjek)
-                onAuthStateChanged(auth, (user) => {
+                // 2. Lyt efter Auth-statusændringer (vigtig for Admin-tjek og redirect-resultater)
+                onAuthStateChanged(auth, async (user) => {
                     currentUser = user;
+                    // Håndter redirect resultatet fra Google Sign-In
+                    await handleRedirectResult(); 
+                    
                     // Kalder setup efter Auth er klar
                     setupContentListeners(); 
                     setupAdminAuthListener();
@@ -643,6 +647,21 @@
 
             } catch (error) {
                 console.error("Firebase Initialization Error:", error);
+            }
+        }
+        
+        // Funktion til at håndtere redirect-resultatet efter Google login
+        async function handleRedirectResult() {
+            try {
+                const result = await getRedirectResult(auth);
+                if (result) {
+                    // Brugeren er nu logget ind, og onAuthStateChanged vil opfange det
+                    console.log("Google Sign-In Redirect successful for:", result.user.email);
+                }
+            } catch (error) {
+                console.error("Fejl ved håndtering af Google Redirect Result:", error);
+                // Viser fejlbesked på admin status feltet
+                document.getElementById('admin-management-status').textContent = `Login mislykkedes: ${error.message}`;
             }
         }
         
@@ -656,7 +675,7 @@
                     updateAdminUI(false);
                 });
             } else {
-                // Hvis ikke logget ind -> log ind med Google
+                // Hvis ikke logget ind -> log ind med Google (nu via redirect)
                 signInWithGoogle();
             }
         }
@@ -664,11 +683,11 @@
         async function signInWithGoogle() {
             const provider = new GoogleAuthProvider();
             try {
-                const result = await signInWithPopup(auth, provider);
-                // Checkes af onAuthStateChanged -> setupAdminAuthListener
-                console.log("Google Sign-In successful for:", result.user.email);
+                // BRUGER NU REDIRECT I STEDET FOR POPUP
+                await signInWithRedirect(auth, provider);
+                // Efter dette kald omdirigeres brugeren. Resten håndteres af handleRedirectResult.
             } catch (error) {
-                console.error("Google Sign-In Failed:", error);
+                console.error("Google Sign-In Redirect Failed:", error);
                 showAdminStatus("Fejl ved Google Login. Prøv igen.", "bg-red-100 text-red-800");
             }
         }
@@ -746,6 +765,8 @@
 
         // 1. Initial Fetch og Listener for Hovedindhold
         function setupContentListeners() {
+            if (!db) return; // Sikkerhedstjek
+            
             const docRef = doc(db, CONTENT_DOC_PATH);
             
             // Tjek om indholdet eksisterer ved første load

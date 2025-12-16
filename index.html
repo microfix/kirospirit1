@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kirospirit | Professionel Kiropraktik & Velvære</title>
+    <!-- Indlæs Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Indlæs Lucide ikoner -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Font: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0d9488; /* Teal 600 - Matcher logoets tone */
+            --secondary-color: #2dd4bf; /* Teal 400 */
+            --bg-color: #f0fdfa; /* Teal 50 */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: white;
+            scroll-behavior: smooth;
+        }
+        .text-kirospirit { color: var(--primary-color); }
+        .bg-kirospirit { background-color: var(--primary-color); }
+        .hover-kirospirit:hover { background-color: var(--secondary-color); }
+        
+        /* OPDATERET: Hero Baggrundsbillede */
+        .hero-bg {
+            background-image: url('https://kirospirit.dk/wp-content/uploads/2025/01/DSC05145-2048x1365.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        /* Tilpas ikoner */
+        .lucide { width: 1.5rem; height: 1.5rem; }
+    </style>
+</head>
+<body>
+
+    <!-- Fast Navigationsbar -->
+    <header class="sticky top-0 z-50 bg-white shadow-md bg-opacity-95 backdrop-blur-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
+            
+            <!-- OPDATERET: Logo Billede -->
+            <a href="#hjem" class="flex items-center">
+                <img src="https://kirospirit.dk/wp-content/uploads/2024/12/cropped-Logo.png" alt="Kirospirit Logo" class="h-10 sm:h-14 w-auto">
+            </a>
+            
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#hjem" class="text-gray-600 hover:text-kirospirit transition duration-300 font-medium text-sm uppercase tracking-wider">Hjem</a>
+                <a href="#omos" class="text-gray-600 hover:text-kirospirit transition duration-300 font-medium text-sm uppercase tracking-wider">Om Os</a>
+                <a href="#behandlinger" class="text-gray-600 hover:text-kirospirit transition duration-300 font-medium text-sm uppercase tracking-wider">Behandlinger</a>
+                <a href="#kontakt" class="text-gray-600 hover:text-kirospirit transition duration-300 font-medium text-sm uppercase tracking-wider">Kontakt</a>
+            </div>
+
+            <!-- CTA Button (Desktop) -->
+            <div class="hidden md:block">
+                <a href="#kontakt" class="bg-kirospirit text-white px-6 py-2.5 rounded-full font-semibold shadow-md hover-kirospirit transition duration-300 text-sm uppercase tracking-wide">Book Tid Online</a>
+            </div>
+
+            <!-- Mobil Menu Knap -->
+            <button id="menu-button" class="md:hidden text-gray-600 p-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-kirospirit">
+                <i data-lucide="menu"></i>
+            </button>
+        </nav>
+        
+        <!-- Mobil Menu (Skjult som standard) -->
+        <div id="mobile-menu" class="hidden md:hidden absolute w-full bg-white shadow-xl py-4 border-t border-gray-100">
+            <a href="#hjem" class="block px-6 py-3 text-gray-700 font-medium hover:bg-bg-color hover:text-kirospirit transition" onclick="toggleMenu()">Hjem</a>
+            <a href="#omos" class="block px-6 py-3 text-gray-700 font-medium hover:bg-bg-color hover:text-kirospirit transition" onclick="toggleMenu()">Om Os</a>
+            <a href="#behandlinger" class="block px-6 py-3 text-gray-700 font-medium hover:bg-bg-color hover:text-kirospirit transition" onclick="toggleMenu()">Behandlinger</a>
+            <a href="#kontakt" class="block px-6 py-3 text-gray-700 font-medium hover:bg-bg-color hover:text-kirospirit transition" onclick="toggleMenu()">Kontakt</a>
+            <div class="px-6 pt-4">
+                 <a href="#kontakt" class="block text-center w-full bg-kirospirit text-white px-4 py-3 rounded-full font-semibold hover-kirospirit shadow-md transition" onclick="toggleMenu()">Book Tid Online</a>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        
+        <!-- Sektion 1: Hero (Hjem) - Nu med det nye billede og overlay for læsbarhed -->
+        <section id="hjem" class="hero-bg text-white flex items-center justify-center min-h-[650px] text-center bg-gray-900 bg-opacity-60 bg-blend-overlay">
+            <div class="p-8 max-w-4xl m-4">
+                <h1 class="text-5xl sm:text-7xl font-extrabold mb-6 leading-tight drop-shadow-lg">
+                    Velkommen til <span class="text-secondary-color">Kirospirit</span>
+                </h1>
+                <p class="text-xl sm:text-3xl font-medium mb-10 opacity-95 drop-shadow-md max-w-2xl mx-auto">
+                    Moderne kiropraktik og helhedsorienteret behandling i hjertet af København.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+                    <a href="#kontakt" class="bg-kirospirit text-white border-2 border-kirospirit px-10 py-4 rounded-full text-lg font-bold uppercase tracking-wider shadow-xl transform hover:scale-105 transition duration-300">
+                        Book Konsultation
+                    </a>
+                    <a href="#behandlinger" class="bg-transparent text-white border-2 border-white px-10 py-4 rounded-full text-lg font-bold uppercase tracking-wider shadow-xl hover:bg-white hover:text-gray-900 transition duration-300">
+                        Se Behandlinger
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sektion 2: Om Os (About Us) -->
+        <section id="omos" class="py-24 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="lg:text-center mb-16">
+                    <h2 class="text-base text-kirospirit font-bold tracking-wide uppercase">Om Klinikken</h2>
+                    <p class="mt-2 text-4xl leading-10 font-extrabold tracking-tight text-gray-900 sm:text-5xl">
+                        Din vej til en krop i balance
+                    </p>
+                    <p class="mt-4 max-w-3xl text-xl text-gray-600 lg:mx-auto">
+                        Hos Kirospirit tror vi på en helhedsorienteret tilgang. Vi behandler ikke kun symptomerne, men finder årsagen for at sikre varige resultater.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                    <!-- Filosofi Kort -->
+                    <div class="p-8 bg-bg-color rounded-2xl hover:shadow-lg transition duration-300 border border-transparent hover:border-secondary-color group">
+                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-kirospirit text-white mb-6 mx-auto group-hover:scale-110 transition">
+                            <i data-lucide="heart-handshake" class="h-8 w-8"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 text-center mb-4">Vores Filosofi</h3>
+                        <p class="text-gray-700 text-center leading-relaxed">
+                            Vi kombinerer klassisk kiropraktik med den nyeste viden inden for sundhed for at skabe det bedste forløb for dig.
+                        </p>
+                    </div>
+
+                    <!-- Erfaring Kort -->
+                    <div class="p-8 bg-bg-color rounded-2xl hover:shadow-lg transition duration-300 border border-transparent hover:border-secondary-color group">
+                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-kirospirit text-white mb-6 mx-auto group-hover:scale-110 transition">
+                            <i data-lucide="award" class="h-8 w-8"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 text-center mb-4">Høj Faglighed</h3>
+                        <p class="text-gray-700 text-center leading-relaxed">
+                            Vores behandlere er autoriserede og holder sig løbende opdateret med efteruddannelse for at sikre højeste kvalitet.
+                        </p>
+                    </div>
+                    
+                    <!-- Tryghed Kort -->
+                    <div class="p-8 bg-bg-color rounded-2xl hover:shadow-lg transition duration-300 border border-transparent hover:border-secondary-color group">
+                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-kirospirit text-white mb-6 mx-auto group-hover:scale-110 transition">
+                            <i data-lucide="shield-check" class="h-8 w-8"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 text-center mb-4">Trygge Rammer</h3>
+                        <p class="text-gray-700 text-center leading-relaxed">
+                            Vi tager os tid til at lytte til dig i rolige og professionelle omgivelser, så du føler dig i trygge hænder.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sektion 3: Behandlinger (Services) -->
+        <section id="behandlinger" class="py-24 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-base text-kirospirit font-bold tracking-wide uppercase">Vi tilbyder</h2>
+                    <p class="mt-2 text-4xl font-extrabold text-gray-900 sm:text-5xl">
+                        Specialiserede Behandlinger
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Behandling 1: Kiropraktik -->
+                    <div class="bg-white rounded-2xl shadow-md p-8 hover:shadow-xl transition duration-300 flex flex-col h-full border-t-4 border-kirospirit">
+                        <div class="flex items-center mb-6">
+                            <div class="bg-bg-color p-3 rounded-lg">
+                                <i data-lucide="bone" class="w-8 h-8 text-kirospirit"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Kiropraktik</h3>
+                        </div>
+                        <p class="text-gray-600 flex-grow leading-relaxed">
+                            Diagnosticering, behandling og forebyggelse af lidelser i bevægeapparatet, med fokus på rygsøjlens funktion og nervesystemet. Effektivt mod ryg- og nakkesmerter.
+                        </p>
+                    </div>
+
+                    <!-- Behandling 2: Sportsskader -->
+                    <div class="bg-white rounded-2xl shadow-md p-8 hover:shadow-xl transition duration-300 flex flex-col h-full border-t-4 border-kirospirit">
+                        <div class="flex items-center mb-6">
+                            <div class="bg-bg-color p-3 rounded-lg">
+                                <i data-lucide="activity" class="w-8 h-8 text-kirospirit"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Sportsskader</h3>
+                        </div>
+                        <p class="text-gray-600 flex-grow leading-relaxed">
+                            Hurtig og effektiv behandling af akutte og kroniske sportsskader. Vi hjælper dig med genoptræning, så du kan vende stærkere tilbage til din sport.
+                        </p>
+                    </div>
+                    
+                    <!-- Behandling 3: Hovedpine & Migræne -->
+                    <div class="bg-white rounded-2xl shadow-md p-8 hover:shadow-xl transition duration-300 flex flex-col h-full border-t-4 border-kirospirit">
+                        <div class="flex items-center mb-6">
+                            <div class="bg-bg-color p-3 rounded-lg">
+                                <i data-lucide="brain-circuit" class="w-8 h-8 text-kirospirit"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Hovedpine & Migræne</h3>
+                        </div>
+                        <p class="text-gray-600 flex-grow leading-relaxed">
+                            Mange former for hovedpine stammer fra spændinger i nakke og skuldre. Vi tilbyder målrettet behandling for at lindre og forebygge spændingshovedpine og migræne.
+                        </p>
+                    </div>
+                     <!-- Behandling 4: Graviditet -->
+                     <div class="bg-white rounded-2xl shadow-md p-8 hover:shadow-xl transition duration-300 flex flex-col h-full border-t-4 border-secondary-color lg:col-start-1 lg:col-end-2">
+                        <div class="flex items-center mb-6">
+                            <div class="bg-bg-color p-3 rounded-lg">
+                                <i data-lucide="baby" class="w-8 h-8 text-secondary-color"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Gravidbehandling</h3>
+                        </div>
+                        <p class="text-gray-600 flex-grow leading-relaxed">
+                            Skånsom behandling af graviditetsrelaterede gener som bækkenløsning og rygsmerter, der sikrer dig en bedre graviditet.
+                        </p>
+                    </div>
+
+                    <!-- Behandling 5: Spædbørn -->
+                    <div class="bg-white rounded-2xl shadow-md p-8 hover:shadow-xl transition duration-300 flex flex-col h-full border-t-4 border-secondary-color lg:col-start-2 lg:col-end-3">
+                        <div class="flex items-center mb-6">
+                            <div class="bg-bg-color p-3 rounded-lg">
+                                <i data-lucide="smile-plus" class="w-8 h-8 text-secondary-color"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Børn & Spædbørn</h3>
+                        </div>
+                        <p class="text-gray-600 flex-grow leading-relaxed">
+                            Blid undersøgelse og behandling af spædbørn og børn. Vi hjælper ofte med problematikker som kolik, skævheder og motorisk uro.
+                        </p>
+                    </div>
+                    
+                     <!-- Behandling 6: Massage (CTA kort) -->
+                     <div class="bg-kirospirit rounded-2xl shadow-md p-8 hover:shadow-xl transition duration-300 flex flex-col h-full items-center justify-center text-center text-white lg:col-start-3 lg:col-end-4">
+                        <i data-lucide="calendar-check" class="w-16 h-16 mb-6 opacity-90"></i>
+                        <h3 class="text-3xl font-bold mb-4">Er du i tvivl?</h3>
+                        <p class="mb-8 text-lg opacity-95">
+                            Kontakt os for en uforpligtende snak om, hvordan vi kan hjælpe netop dig.
+                        </p>
+                         <a href="#kontakt" class="bg-white text-kirospirit px-8 py-3 rounded-full font-bold uppercase tracking-wider hover:bg-secondary-color hover:text-white transition">Kontakt Os Nu</a>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Sektion 4: Kontakt (Contact Form) -->
+        <section id="kontakt" class="py-24 bg-white relative overflow-hidden">
+            <!-- Dekorativ baggrundscirkel -->
+            <div class="absolute top-0 left-0 transform -translate-x-1/2 -translate-y-1/2 rounded-full bg-bg-color w-[800px] h-[800px] opacity-50 -z-10"></div>
+            
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-base text-kirospirit font-bold tracking-wide uppercase">Kontakt & Booking</h2>
+                    <p class="mt-2 text-4xl font-extrabold text-gray-900 sm:text-5xl">
+                        Vi står klar til at hjælpe dig
+                    </p>
+                </div>
+
+                <div class="flex flex-wrap -mx-4 lg:flex-nowrap gap-8">
+                    <!-- Kontakt Formular -->
+                    <div class="w-full lg:w-7/12 px-4 lg:mb-0">
+                        <div class="bg-white p-8 sm:p-12 rounded-2xl shadow-2xl border border-gray-100">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-8">Send en besked</h3>
+                            <form id="contact-form" onsubmit="handleFormSubmit(event)">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                    <!-- Navn -->
+                                    <div>
+                                        <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">Fulde Navn *</label>
+                                        <div class="relative">
+                                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <i data-lucide="user" class="text-gray-400 w-5 h-5"></i>
+                                            </div>
+                                            <input type="text" id="name" name="name" required class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-kirospirit focus:border-transparent transition duration-150 bg-gray-50" placeholder="Dit navn">
+                                        </div>
+                                    </div>
+                                    <!-- E-mail -->
+                                    <div>
+                                        <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">E-mail Adresse *</label>
+                                        <div class="relative">
+                                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <i data-lucide="mail" class="text-gray-400 w-5 h-5"></i>
+                                            </div>
+                                            <input type="email" id="email" name="email" required class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-kirospirit focus:border-transparent transition duration-150 bg-gray-50" placeholder="din@email.dk">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Telefon (Valgfri) -->
+                                <div class="mb-6">
+                                    <label for="phone" class="block text-sm font-semibold text-gray-700 mb-2">Telefonnummer (valgfrit)</label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i data-lucide="phone" class="text-gray-400 w-5 h-5"></i>
+                                        </div>
+                                        <input type="tel" id="phone" name="phone" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-kirospirit focus:border-transparent transition duration-150 bg-gray-50" placeholder="+45 12 34 56 78">
+                                    </div>
+                                </div>
+
+                                <!-- Besked -->
+                                <div class="mb-8">
+                                    <label for="message" class="block text-sm font-semibold text-gray-700 mb-2">Hvordan kan vi hjælpe? *</label>
+                                    <textarea id="message" name="message" rows="5" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-kirospirit focus:border-transparent transition duration-150 bg-gray-50" placeholder="Beskriv dine symptomer eller spørgsmål her..."></textarea>
+                                </div>
+                                
+                                <!-- Status/Bekræftelsesboks -->
+                                <div id="status-message" class="hidden p-4 mb-6 rounded-lg text-sm font-medium flex items-center" role="alert"></div>
+
+                                <!-- Send Knap -->
+                                <button type="submit" class="w-full bg-kirospirit text-white px-6 py-4 rounded-full font-bold text-lg shadow-md hover:bg-secondary-color transition duration-300 focus:outline-none focus:ring-4 focus:ring-kirospirit focus:ring-opacity-50 flex items-center justify-center uppercase tracking-wider">
+                                    <span>Send Besked</span>
+                                    <i data-lucide="send" class="ml-2 w-5 h-5"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Kontaktdetaljer og Info -->
+                    <div class="w-full lg:w-5/12 px-4 flex flex-col gap-8">
+                        
+                         <!-- Info boks -->
+                         <div class="bg-gradient-to-br from-kirospirit to-secondary-color p-8 rounded-2xl shadow-xl text-white">
+                            <h3 class="text-2xl font-bold mb-6">Klinik Information</h3>
+                            <ul class="space-y-6">
+                                <li class="flex items-start">
+                                    <i data-lucide="map-pin" class="mr-4 mt-1 flex-shrink-0"></i>
+                                    <span>
+                                        <strong>Kirospirit</strong><br>
+                                        Adresse Kommer Her 123<br>
+                                        1000 København K
+                                    </span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i data-lucide="phone" class="mr-4 flex-shrink-0"></i>
+                                    <span>
+                                        <a href="tel:+4512345678" class="hover:underline font-semibold">+45 12 34 56 78</a>
+                                    </span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i data-lucide="mail" class="mr-4 flex-shrink-0"></i>
+                                    <span>
+                                        <a href="mailto:kontakt@kirospirit.dk" class="hover:underline font-semibold">kontakt@kirospirit.dk</a>
+                                    </span>
+                                </li>
+                                 <li class="flex items-start">
+                                    <i data-lucide="clock" class="mr-4 mt-1 flex-shrink-0"></i>
+                                    <span>
+                                        <strong>Åbningstider:</strong><br>
+                                        Man - Tor: 08:00 - 17:00<br>
+                                        Fre: 08:00 - 15:00<br>
+                                        Weekend: Lukket
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- SoMe boks -->
+                        <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 flex flex-col justify-center items-center text-center flex-grow">
+                            <h4 class="text-xl font-bold text-gray-900 mb-6">Følg med på sociale medier</h4>
+                            <p class="text-gray-600 mb-6">Få tips til sundhed, øvelser og nyheder fra klinikken.</p>
+                            <div class="flex space-x-6">
+                                <a href="#" aria-label="Facebook" class="bg-bg-color p-3 rounded-full text-kirospirit hover:bg-kirospirit hover:text-white transition duration-300 transform hover:-translate-y-1 shadow-sm"><i data-lucide="facebook" class="w-6 h-6"></i></a>
+                                <a href="#" aria-label="Instagram" class="bg-bg-color p-3 rounded-full text-kirospirit hover:bg-kirospirit hover:text-white transition duration-300 transform hover:-translate-y-1 shadow-sm"><i data-lucide="instagram" class="w-6 h-6"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+            <!-- Kolonne 1: Logo & Intro -->
+            <div class="flex flex-col items-center md:items-start">
+                <!-- Footer Logo - Lys udgave via CSS filtere -->
+                <img src="https://kirospirit.dk/wp-content/uploads/2024/12/cropped-Logo.png" alt="Kirospirit Logo" class="h-12 w-auto mb-4 brightness-0 invert">
+                <p class="text-sm leading-relaxed max-w-xs mx-auto md:mx-0">
+                    Professionel kiropraktik og sundhedsfremmende behandlinger med fokus på det hele menneske.
+                </p>
+            </div>
+            
+             <!-- Kolonne 2: Hurtige Links -->
+             <div class="flex flex-col items-center md:items-start">
+                <h4 class="text-white text-lg font-bold mb-4 uppercase tracking-wider">Navigation</h4>
+                <ul class="space-y-2">
+                    <li><a href="#hjem" class="hover:text-secondary-color transition">Forside</a></li>
+                    <li><a href="#omos" class="hover:text-secondary-color transition">Om Klinikken</a></li>
+                    <li><a href="#behandlinger" class="hover:text-secondary-color transition">Vores Behandlinger</a></li>
+                    <li><a href="#kontakt" class="hover:text-secondary-color transition">Kontakt & Booking</a></li>
+                </ul>
+            </div>
+
+             <!-- Kolonne 3: Juridisk -->
+             <div class="flex flex-col items-center md:items-start">
+                <h4 class="text-white text-lg font-bold mb-4 uppercase tracking-wider">Information</h4>
+                 <ul class="space-y-2">
+                    <li><a href="#" class="hover:text-secondary-color transition">Privatlivspolitik</a></li>
+                    <li><a href="#" class="hover:text-secondary-color transition">Cookiepolitik</a></li>
+                    <li><a href="#" class="hover:text-secondary-color transition">Handelsbetingelser</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Copyright Bar -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mt-12 pt-8 border-t border-gray-800 text-sm text-gray-500">
+            <p>&copy; <span id="year"></span> Kirospirit. Alle rettigheder forbeholdes.</p>
+        </div>
+    </footer>
+
+
+    <script>
+        // Initialiser Lucide ikoner
+        lucide.createIcons();
+
+        // Dynamisk årstal i footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Logik for mobilmenu
+        const menuButton = document.getElementById('menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        function toggleMenu() {
+            mobileMenu.classList.toggle('hidden');
+            const icon = menuButton.querySelector('i');
+            if (mobileMenu.classList.contains('hidden')) {
+                icon.setAttribute('data-lucide', 'menu');
+            } else {
+                icon.setAttribute('data-lucide', 'x');
+            }
+            lucide.createIcons();
+        }
+        menuButton.addEventListener('click', toggleMenu);
+
+        // Luk mobilmenu når man klikker på et link
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (!mobileMenu.classList.contains('hidden')) {
+                    toggleMenu();
+                }
+            });
+        });
+
+        // Simuleret håndtering af kontaktformular
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const form = event.target;
+            const statusMessage = document.getElementById('status-message');
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerHTML;
+
+            // Ændre knap tekst til "Sender..."
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span>Sender...</span><i data-lucide="loader-2" class="ml-2 w-5 h-5 animate-spin"></i>';
+            lucide.createIcons();
+            
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            console.log("Formular data sendt (simuleret):", data);
+
+            // Simuleret netværksforsinkelse
+            setTimeout(() => {
+                 // Reset status besked
+                statusMessage.className = 'hidden p-4 mb-6 rounded-lg text-sm font-medium flex items-center';
+                statusMessage.innerHTML = '';
+
+                // Simuler succes (ændre til false for at teste fejl)
+                const success = true; 
+
+                if (success) {
+                    statusMessage.classList.remove('hidden');
+                    statusMessage.classList.add('bg-green-50', 'text-green-800', 'border', 'border-green-200');
+                    statusMessage.innerHTML = '<i data-lucide="check-circle-2" class="w-5 h-5 mr-3 text-green-600"></i> Tak for din besked! Vi vender tilbage hurtigst muligt.';
+                    form.reset();
+                } else {
+                    statusMessage.classList.remove('hidden');
+                    statusMessage.classList.add('bg-red-50', 'text-red-800', 'border', 'border-red-200');
+                    statusMessage.innerHTML = '<i data-lucide="alert-circle" class="w-5 h-5 mr-3 text-red-600"></i> Der skete en fejl. Prøv venligst igen, eller ring til os.';
+                }
+                
+                // Gendan knap
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+                lucide.createIcons();
+
+                // Skjul beskeden efter 8 sekunder
+                setTimeout(() => {
+                    statusMessage.classList.add('hidden');
+                }, 8000);
+
+            }, 1500); // 1.5 sekunders forsinkelse
+        }
+    </script>
+
+</body>
+</html>

@@ -55,9 +55,56 @@
             margin: 0.25rem 0;
             cursor: pointer;
             transition: border-color 0.2s;
+            color: #1f2937; /* SIKRER SORT TEKST PÅ HVID BAGGRUND */
+            background-color: white;
         }
         .admin-edit:hover {
              border-color: #f59e0b; /* Yellow 500 */
+        }
+        
+        /* NYT FIX: Standard responsive iframe container */
+        .aspect-ratio-box {
+            position: relative;
+            width: 100%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+        }
+        .aspect-ratio-box iframe,
+        .aspect-ratio-box video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100% !important;
+            height: 100% !important;
+            border: 0;
+        }
+
+        /* RETTET: Sikrer at al admin tekst er sort/mørk */
+        #admin-panel {
+            min-height: 50vh;
+            color: #1f2937; 
+        }
+        /* NY FIX: Tilsidesætter den forrige regel for at bevare grøn farve i header knappen */
+        #admin-auth-button,
+        #admin-auth-button i {
+            color: var(--primary-color) !important;
+        }
+        #admin-panel button {
+             color: #1f2937; 
+        }
+        #admin-panel .text-red-600 { /* Bevarer rød for advarsler */
+            color: #dc2626;
+        }
+
+        /* Tvinger inputfelter og textarea i modaler til at have sort tekst */
+        #news-modal input,
+        #news-modal textarea,
+        #edit-modal input,
+        #edit-modal textarea {
+            color: #1f2937 !important; 
+            background-color: white !important; 
         }
     </style>
 </head>
@@ -90,6 +137,7 @@
             <!-- Mobil Menu Knap & Admin Login -->
             <div class="flex items-center space-x-4">
                  <!-- Admin Login / Logout Knap -->
+                <!-- I Canvas-miljøet åbner/lukker denne knap Admin Dashboard direkte, da autentificering er deaktiveret -->
                 <button id="admin-auth-button" class="text-kirospirit p-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-kirospirit" onclick="handleAdminAuth()">
                     <i data-lucide="shield" class="w-5 h-5"></i>
                 </button>
@@ -121,28 +169,32 @@
                     <i data-lucide="settings-2" class="w-7 h-7 mr-3 text-yellow-600"></i>
                     Admin Dashboard
                 </h2>
-                <div id="admin-status" class="mb-6 p-3 rounded-lg bg-yellow-100 text-yellow-800 text-sm font-medium">Du er logget ind som <span id="admin-email" class="font-bold"></span></div>
+                <!-- Viser fast e-mail, da login er omgået i Canvas -->
+                <div id="admin-status" class="mb-6 p-3 rounded-lg bg-yellow-100 text-yellow-800 text-sm font-medium">Du er logget ind som <span id="admin-email" class="font-bold">nicolaihlarsen@gmail.com (Canvas Admin)</span></div>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     
                     <!-- 1. Indholdsredigering -->
                     <div class="bg-white p-6 rounded-xl shadow-lg lg:col-span-2">
-                        <h3 class="text-xl font-bold mb-4 border-b pb-2 text-kirospirit">Rediger Website Tekster</h3>
+                        <h3 class="text-xl font-bold mb-4 border-b pb-2 text-kirospirit">Rediger Website Tekster & Layout</h3>
                         <p class="mb-4 text-sm text-gray-600">Klik på teksten herunder for at redigere den. Ændringer træder i kraft straks.</p>
                         
                         <!-- Hero Redigering -->
                         <div class="mb-6 border p-4 rounded-lg bg-gray-50">
                             <label class="block text-sm font-semibold mb-2">Hero Overskrift (H1)</label>
-                            <div id="edit-hero_h1" class="admin-edit bg-white" data-key="hero_h1" data-type="text">Indhold hentes...</div>
+                            <div id="edit-hero_h1" class="admin-edit" data-key="hero_h1" data-type="text">Henter indhold...</div>
                             
                             <label class="block text-sm font-semibold mb-2 mt-4">Hero Underoverskrift (P)</label>
-                            <div id="edit-hero_p" class="admin-edit bg-white" data-key="hero_p" data-type="text">Indhold hentes...</div>
+                            <div id="edit-hero_p" class="admin-edit" data-key="hero_p" data-type="text">Henter indhold...</div>
+
+                            <label class="block text-sm font-semibold mb-2 mt-4">Nyheds Overskrift (H2)</label>
+                            <div id="edit-news_h2" class="admin-edit" data-key="news_h2" data-type="text">Henter indhold...</div>
                         </div>
 
                         <!-- Birgit Citat Redigering -->
                          <div class="mb-6 border p-4 rounded-lg bg-gray-50">
                             <label class="block text-sm font-semibold mb-2">Birgit Citat (Lang)</label>
-                            <div id="edit-birgit_quote" class="admin-edit bg-white" data-key="birgit_quote" data-type="textarea">Indhold hentes...</div>
+                            <div id="edit-birgit_quote" class="admin-edit" data-key="birgit_quote" data-type="textarea">Henter indhold...</div>
                         </div>
                     </div>
 
@@ -151,7 +203,19 @@
                         <h3 class="text-xl font-bold mb-4 border-b pb-2 text-kirospirit">Nyheder & Sociale Medier</h3>
                         <p class="mb-4 text-sm text-gray-600">Opret opslag, tilbud eller del Instagram/Facebook links.</p>
 
-                        <button onclick="openNewsModal()" class="w-full bg-secondary-color text-white px-4 py-3 rounded-full font-bold hover:bg-kirospirit transition flex items-center justify-center">
+                        <!-- NYT: Layout Kontrol -->
+                        <div class="mb-6">
+                            <label for="layout-control" class="block text-sm font-semibold mb-2">Vis Opslag som:</label>
+                            <select id="layout-control" onchange="updateNewsLayout(this.value)" class="w-full p-2 border border-gray-300 rounded-lg bg-gray-50 focus:ring-kirospirit focus:border-kirospirit text-gray-900">
+                                <option value="1">1 Kolonne (Fuld bredde)</option>
+                                <option value="2">2 Kolonner</option>
+                                <option value="3">3 Kolonner</option>
+                            </select>
+                            <p id="layout-status" class="mt-2 text-xs text-green-600"></p>
+                        </div>
+                        
+                        <!-- OPRET KNAP -->
+                        <button onclick="openNewsModal()" class="w-full bg-secondary-color text-gray-900 px-4 py-3 rounded-full font-bold hover:bg-kirospirit hover:text-white transition flex items-center justify-center">
                             <i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i> Opret Nyt Opslag
                         </button>
                         
@@ -163,7 +227,42 @@
                         </div>
                     </div>
                     
-                    <!-- 3. Admin Styring (Kun for den første admin) -->
+                    <!-- 3. Kontakt Styring -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg lg:col-span-3">
+                        <h3 class="text-xl font-bold mb-4 border-b pb-2 text-kirospirit">Kontakt & Sociale Medier</h3>
+                         <p class="mb-4 text-sm text-gray-600">Rediger telefonnummer, e-mails og links.</p>
+
+                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Besked Modtager E-mail (Backend)</label>
+                                <div id="edit-contact_recipient" class="admin-edit" data-key="contact_recipient" data-type="text">Henter...</div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Klinik Hoved-E-mail (Visuel)</label>
+                                <div id="edit-contact_email" class="admin-edit" data-key="contact_email" data-type="text">Henter...</div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Telefonnummer</label>
+                                <div id="edit-contact_phone" class="admin-edit" data-key="contact_phone" data-type="text">Henter...</div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold mb-2">Facebook Link</label>
+                                <div id="edit-social_facebook" class="admin-edit" data-key="social_facebook" data-type="text">Henter...</div>
+                            </div>
+                        </div>
+
+                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                             <div>
+                                <label class="block text-sm font-semibold mb-2">Instagram Link</label>
+                                <div id="edit-social_instagram" class="admin-edit" data-key="social_instagram" data-type="text">Henter...</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 4. Admin Styring -->
                     <div class="bg-red-50 p-6 rounded-xl shadow-lg border border-red-200 lg:col-span-3" id="admin-management-section">
                         <h3 class="text-xl font-bold mb-4 border-b pb-2 text-red-600">Administratorstyring (Super Admin)</h3>
                         <p class="mb-4 text-sm text-gray-700">Her kan du tilføje eller fjerne e-mails, der har adgang til dette panel.</p>
@@ -212,12 +311,13 @@
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="text-center mb-12">
                          <h2 class="text-base text-kirospirit font-bold tracking-wide uppercase">Seneste</h2>
-                        <p class="mt-2 text-4xl font-extrabold text-gray-900 sm:text-5xl">
+                        <p id="news_h2" class="mt-2 text-4xl font-extrabold text-gray-900 sm:text-5xl">
                             Opdateringer & Tilbud
                         </p>
                     </div>
+                    <!-- VIGTIGT: news-display opdateres dynamisk af JS for at inkludere grid-klasser -->
                     <div id="news-display" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                         <p class="text-gray-500 italic md:col-span-3 text-center">Ingen nyheder fundet.</p>
+                         <p class="text-gray-500 italic md:col-span-3 text-center">Henter nyheder...</p>
                     </div>
                 </div>
             </div>
@@ -413,7 +513,7 @@
             </div>
         </section>
 
-        <!-- Sektion 4: Kontakt (Contact Form) - Uændret, statisk for nu -->
+        <!-- Sektion 4: Kontakt (Contact Form) - OPDATERET TIL FORMULAR -->
         <section id="kontakt" class="page-section py-24 bg-white relative overflow-hidden">
             <!-- Dekorativ baggrundscirkel -->
             <div class="absolute top-0 left-0 transform -translate-x-1/2 -translate-y-1/2 rounded-full bg-bg-color w-[800px] h-[800px] opacity-50 -z-10"></div>
@@ -422,25 +522,55 @@
                 <div class="text-center mb-16">
                     <h2 class="text-base text-kirospirit font-bold tracking-wide uppercase">Kontakt & Booking</h2>
                     <p class="mt-2 text-4xl font-extrabold text-gray-900 sm:text-5xl">
-                        Vi står klar til at hjælpe dig
+                        Send Os En Besked
                     </p>
                 </div>
 
                 <div class="flex flex-wrap -mx-4 lg:flex-nowrap gap-8">
-                    <!-- I denne sektion ville booking-widget fra SimplyBook.me/Calendly blive indsat -->
+                    
+                    <!-- Kontakt Formular -->
                     <div class="w-full lg:w-7/12 px-4 lg:mb-0">
-                         <div class="bg-bg-color p-8 sm:p-12 rounded-2xl shadow-2xl border border-gray-100 text-center">
-                            <h3 class="text-3xl font-bold text-gray-900 mb-6">Online Booking System</h3>
-                            <div class="text-gray-600 mb-8 p-6 border-2 border-dashed border-kirospirit rounded-lg">
-                                <p class="font-semibold text-lg mb-2">Dit eksterne booking system (f.eks. SimplyBook.me / Calendly) skal indsættes her via iframe eller script.</p>
-                                <p class="text-sm">Denne boks erstatter den gamle kontaktformular for at give en bedre brugeroplevelse.</p>
-                                <p class="mt-4"><i data-lucide="calendar-check" class="w-8 h-8 text-kirospirit inline-block"></i></p>
-                            </div>
-                            <a href="#kontakt" class="bg-kirospirit text-white px-8 py-3 rounded-full font-bold hover:bg-secondary-color transition">Gå til Booking</a>
+                        <div class="bg-white p-8 sm:p-12 rounded-2xl shadow-2xl border border-gray-100">
+                             <h3 class="text-2xl font-bold text-gray-900 mb-8">Uforpligtende Forespørgsel</h3>
+                            <form id="contact-form" onsubmit="handleFormSubmit(event)">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                    <!-- Navn -->
+                                    <div>
+                                        <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">Fulde Navn *</label>
+                                        <input type="text" id="name" name="name" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-kirospirit focus:border-transparent transition duration-150 bg-gray-50" placeholder="Dit navn">
+                                    </div>
+                                    <!-- E-mail -->
+                                    <div>
+                                        <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">Din E-mail *</label>
+                                        <input type="email" id="email" name="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-kirospirit focus:border-transparent transition duration-150 bg-gray-50" placeholder="din@email.dk">
+                                    </div>
+                                </div>
+                                
+                                <!-- Emne -->
+                                <div class="mb-6">
+                                    <label for="subject" class="block text-sm font-semibold text-gray-700 mb-2">Emne</label>
+                                    <input type="text" id="subject" name="subject" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-kirospirit focus:border-transparent transition duration-150 bg-gray-50" placeholder="Spørgsmål til behandling / Forespørgsel">
+                                </div>
+
+                                <!-- Besked -->
+                                <div class="mb-8">
+                                    <label for="message" class="block text-sm font-semibold text-gray-700 mb-2">Din Besked *</label>
+                                    <textarea id="message" name="message" rows="5" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-kirospirit focus:border-transparent transition duration-150 bg-gray-50" placeholder="Skriv din besked her..."></textarea>
+                                </div>
+                                
+                                <!-- Status/Bekræftelsesboks -->
+                                <div id="form-status-message" class="hidden p-4 mb-6 rounded-lg text-sm font-medium flex items-center" role="alert"></div>
+
+                                <!-- Send Knap -->
+                                <button type="submit" id="contact-submit-btn" class="w-full bg-kirospirit text-white px-6 py-4 rounded-full font-bold text-lg shadow-md hover:bg-secondary-color transition duration-300 focus:outline-none focus:ring-4 focus:ring-kirospirit focus:ring-opacity-50 flex items-center justify-center uppercase tracking-wider">
+                                    <span>Send Forespørgsel</span>
+                                    <i data-lucide="send" class="ml-2 w-5 h-5"></i>
+                                </button>
+                            </form>
                         </div>
                     </div>
 
-                    <!-- Kontaktdetaljer og Info (Uændret, statisk) -->
+                    <!-- Kontaktdetaljer og Info (NU DYNAMISK) -->
                     <div class="w-full lg:w-5/12 px-4 flex flex-col gap-8">
                         
                          <!-- Info boks -->
@@ -458,13 +588,13 @@
                                 <li class="flex items-center">
                                     <i data-lucide="phone" class="mr-4 flex-shrink-0"></i>
                                     <span>
-                                        <a href="tel:+4512345678" class="hover:underline font-semibold">+45 12 34 56 78</a>
+                                        Telefon: <a id="contact_phone_link" href="tel:+4512345678" class="hover:underline font-semibold">Henter tlf...</a>
                                     </span>
                                 </li>
                                 <li class="flex items-center">
                                     <i data-lucide="mail" class="mr-4 flex-shrink-0"></i>
                                     <span>
-                                        <a href="mailto:kontakt@kirospirit.dk" class="hover:underline font-semibold">kontakt@kirospirit.dk</a>
+                                        E-mail: <a id="contact_email_link" href="mailto:kontakt@kirospirit.dk" class="hover:underline font-semibold">Henter mail...</a>
                                     </span>
                                 </li>
                                  <li class="flex items-start">
@@ -484,8 +614,8 @@
                             <h4 class="text-xl font-bold text-gray-900 mb-6">Følg med på sociale medier</h4>
                             <p class="text-gray-600 mb-6">Få tips til sundhed, øvelser og nyheder fra klinikken.</p>
                             <div class="flex space-x-6">
-                                <a href="#" aria-label="Facebook" class="bg-bg-color p-3 rounded-full text-kirospirit hover:bg-kirospirit hover:text-white transition duration-300 transform hover:-translate-y-1 shadow-sm"><i data-lucide="facebook" class="w-6 h-6"></i></a>
-                                <a href="#" aria-label="Instagram" class="bg-bg-color p-3 rounded-full text-kirospirit hover:bg-kirospirit hover:text-white transition duration-300 transform hover:-translate-y-1 shadow-sm"><i data-lucide="instagram" class="w-6 h-6"></i></a>
+                                <a id="social_facebook_link" href="#" target="_blank" aria-label="Facebook" class="bg-bg-color p-3 rounded-full text-kirospirit hover:bg-kirospirit hover:text-white transition duration-300 transform hover:-translate-y-1 shadow-sm"><i data-lucide="facebook" class="w-6 h-6"></i></a>
+                                <a id="social_instagram_link" href="#" target="_blank" aria-label="Instagram" class="bg-bg-color p-3 rounded-full text-kirospirit hover:bg-kirospirit hover:text-white transition duration-300 transform hover:-translate-y-1 shadow-sm"><i data-lucide="instagram" class="w-6 h-6"></i></a>
                             </div>
                         </div>
                     </div>
@@ -543,7 +673,7 @@
             <textarea id="modal-content-input" rows="5" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-kirospirit transition duration-150"></textarea>
             <div class="mt-4 flex justify-end space-x-3">
                 <button onclick="closeModal()" class="px-6 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100 transition">Annuller</button>
-                <button onclick="saveContentUpdate()" id="modal-save-button" class="bg-kirospirit text-white px-6 py-2 rounded-full font-bold hover-kirospirit transition">Gem Ændring</button>
+                <button onclick="saveContentUpdate()" id="modal-save-button" class="bg-kirospirit text-white px-6 py-2 rounded-full font-bold hover:bg-kirospirit transition">Gem Ændring</button>
             </div>
             <p id="modal-status" class="mt-3 text-sm text-red-600"></p>
         </div>
@@ -563,19 +693,35 @@
                     <textarea id="news-body" rows="4" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="Få 10% rabat på din næste behandling..."></textarea>
                 </div>
                  <div>
-                    <label class="block text-sm font-semibold mb-1">Medie Link (Instagram/Facebook Video URL, valgfrit)</label>
-                    <input type="url" id="news-media-url" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="https://www.instagram.com/reel/...">
-                    <p class="text-xs text-gray-500 mt-1">Bemærk: Videoer vil blive vist som et klikbart link/embed, da direkte hosting er komplekst.</p>
+                    <label class="block text-sm font-semibold mb-1">Medie Embed Code / Link (Facebook iframe, Instagram embed, Youtube URL)</label>
+                    <!-- OPDATERET: Bruger textarea til at understøtte HTML iframe -->
+                    <textarea id="news-media-url" rows="3" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="Indsæt Facebooks <iframe> kode eller en simpel URL her..."></textarea>
+                    <p class="text-xs text-gray-500 mt-1">Bemærk: Ved Facebook/Instagram: indsæt hele Embed Code'en. Ved Youtube/Video URL: indsæt den simple URL for at se et link.</p>
                 </div>
             </div>
             <div class="mt-6 flex justify-between items-center">
                 <button onclick="closeNewsModal()" class="px-6 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100 transition">Annuller</button>
                 <div class="flex space-x-3">
                      <button onclick="deleteNewsItem()" id="news-delete-button" class="bg-red-500 text-white px-4 py-2 rounded-full font-bold hover:bg-red-600 transition hidden">Slet</button>
-                    <button onclick="saveNewsItem()" id="news-save-button" class="bg-kirospirit text-white px-6 py-2 rounded-full font-bold hover-kirospirit transition">Gem Opslag</button>
+                    <button onclick="saveNewsItem()" id="news-save-button" class="bg-kirospirit text-white px-6 py-2 rounded-full font-bold hover:kirospirit transition">Gem Opslag</button>
                 </div>
             </div>
             <p id="news-modal-status" class="mt-3 text-sm text-red-600"></p>
+        </div>
+    </div>
+    
+    <!-- === Login Modal (Deaktiveret) === -->
+    <div id="login-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-[100] hidden">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-sm p-8 m-4">
+            <h3 class="text-2xl font-bold text-kirospirit mb-6 text-center">Administrator Login</h3>
+            <p class="text-sm text-gray-700 text-center mb-4">E-mail/Adgangskode er ikke aktiveret i Firebase. Log venligst ind på et rigtigt domæne, eller brug Canvas Admin-mode.</p>
+            <div class="space-y-4 input-group">
+                <input type="email" id="login-email" placeholder="E-mail" required disabled>
+                <input type="password" id="login-password" placeholder="Adgangskode" required disabled>
+            </div>
+            <div class="mt-6">
+                <button onclick="closeLoginModal()" class="w-full bg-gray-400 text-white px-6 py-3 rounded-full font-bold">Luk</button>
+            </div>
         </div>
     </div>
 
@@ -583,9 +729,9 @@
     <script type="module">
         // --- Firebase Imports ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        // Her opdateres 'signInWithPopup' til 'signInWithRedirect' og tilhørende 'getRedirectResult'
-        import { getAuth, signInWithCustomToken, signInWithRedirect, getRedirectResult, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection, query, orderBy, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        // Vi beholder disse for kompatibilitet og når appen flyttes
+        import { getAuth, signInWithCustomToken, signOut, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection, query, orderBy, deleteDoc, updateDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         
         // Sæt log-niveau for fejlfinding
@@ -598,8 +744,12 @@
         
         let app, db, auth;
         let isAdmin = false;
-        let currentUser = null;
+        // Simulér logget ind bruger i Canvas for at have et 'currentUser' objekt
+        let currentUser = { email: "nicolaihlarsen@gmail.com (Canvas Admin)" }; 
         let allowedAdmins = [];
+        // Hovedoplysninger
+        let contactInfo = {};
+
         
         // Firestore stier
         const CONTENT_DOC_PATH = `artifacts/${appId}/public/data/site_content/main`;
@@ -607,12 +757,17 @@
         const NEWS_COLLECTION_PATH = `artifacts/${appId}/public/data/news`;
         
         // --- ADMIN INITIAL CONTENT & SETUP ---
-        // Dette er det standardindhold, der indsættes, hvis databasen er HELT TOM (første kørsel).
         const INITIAL_CONTENT = {
             hero_h1: "Velkommen til Kirospirit",
             hero_p: "Moderne kiropraktik og helhedsorienteret behandling i hjertet af København.",
             birgit_quote: "Jeg bruger mine 15 års erfaring som kiropraktor og min viden om, at krop, sind og spirit hænger uløseligt sammen. Behandlingen hos mig er en helhedsbehandling, som hjælper dig med at genfinde balancen i dit liv.",
-            // Den første admin, som anmodet
+            news_h2: "Opdateringer & Tilbud", 
+            news_layout_cols: "3", // NY
+            contact_recipient: "nicolaihlarsen@gmail.com", 
+            contact_email: "kontakt@kirospirit.dk", 
+            contact_phone: "+45 12 34 56 78", 
+            social_facebook: "#", 
+            social_instagram: "#", 
             allowed_emails: ["nicolaihlarsen@gmail.com"] 
         };
 
@@ -623,132 +778,86 @@
                 auth = getAuth(app);
                 db = getFirestore(app);
                 
-                // 1. Initial autentificering
-                if (initialAuthToken) {
+                // Sikkerhedstjek for at sikre Canvas-auth er sat.
+                if (!initialAuthToken) {
+                    console.error("ADVARSEL: __initial_auth_token mangler. Siden kan ikke skrive til Firestore.");
+                    signInAnonymously(auth).catch(console.error);
+                } else {
+                    // Hvis token eksisterer, brug det til at opnå godkendt status (ikke anonym).
                     signInWithCustomToken(auth, initialAuthToken)
                         .then(() => console.log("Canvas auth successful."))
-                        .catch(err => console.error("Canvas auth failed:", err));
-                } else {
-                     signInAnonymously(auth)
-                        .then(() => console.log("Anonymous auth successful."))
-                        .catch(err => console.error("Anonymous auth failed:", err));
+                        .catch(console.error);
                 }
-                
-                // 2. Lyt efter Auth-statusændringer (vigtig for Admin-tjek og redirect-resultater)
-                onAuthStateChanged(auth, async (user) => {
-                    currentUser = user;
-                    // Håndter redirect resultatet fra Google Sign-In
-                    await handleRedirectResult(); 
-                    
-                    // Kalder setup efter Auth er klar
-                    setupContentListeners(); 
-                    setupAdminAuthListener();
-                });
 
+                // VIKTIGT FIX: Kald engangsindlæsning for at undgå vedvarende permissions-fejl i onSnapshot
+                setupContentListeners(); 
+                setupAdminAuthListener();
+                
+                // Tving Admin UI til at være aktiv i Canvas, så du kan redigere indhold.
+                isAdmin = true;
+                updateAdminUI(true);
+                
             } catch (error) {
                 console.error("Firebase Initialization Error:", error);
             }
         }
         
-        // Funktion til at håndtere redirect-resultatet efter Google login
-        async function handleRedirectResult() {
-            try {
-                const result = await getRedirectResult(auth);
-                if (result) {
-                    // Brugeren er nu logget ind, og onAuthStateChanged vil opfange det
-                    console.log("Google Sign-In Redirect successful for:", result.user.email);
-                }
-            } catch (error) {
-                console.error("Fejl ved håndtering af Google Redirect Result:", error);
-                // Viser fejlbesked på admin status feltet
-                document.getElementById('admin-management-status').textContent = `Login mislykkedes: ${error.message}`;
-            }
-        }
-        
-        // --- Authentication Logic ---
+        // --- Authentication Logic (Simuleret for Canvas) ---
 
         function handleAdminAuth() {
-            if (isAdmin) {
-                // Hvis logget ind (og er admin) -> log ud
-                signOut(auth).then(() => {
-                    console.log("Logged out.");
-                    updateAdminUI(false);
-                });
-            } else {
-                // Hvis ikke logget ind -> log ind med Google (nu via redirect)
-                signInWithGoogle();
-            }
-        }
-
-        async function signInWithGoogle() {
-            const provider = new GoogleAuthProvider();
-            try {
-                // BRUGER NU REDIRECT I STEDET FOR POPUP
-                await signInWithRedirect(auth, provider);
-                // Efter dette kald omdirigeres brugeren. Resten håndteres af handleRedirectResult.
-            } catch (error) {
-                console.error("Google Sign-In Redirect Failed:", error);
-                showAdminStatus("Fejl ved Google Login. Prøv igen.", "bg-red-100 text-red-800");
-            }
+            // I Canvas skifter vi kun Admin Dashboard tilstand.
+            isAdmin = !document.getElementById('admin-panel').classList.contains('active');
+            updateAdminUI(isAdmin);
         }
         
-        // Kontrollerer om den nuværende bruger er i admin-listen
+        window.closeLoginModal = function() {
+            document.getElementById('login-modal').classList.add('hidden');
+        }
+        
+        window.authenticateAdmin = function() {
+            document.getElementById('login-modal').classList.remove('hidden');
+        }
+
         function checkAdminStatus(userEmail) {
-            return allowedAdmins.includes(userEmail);
+            // Returnerer altid sandt, når vi simulerer admin adgang
+            return true;
         }
 
         function setupAdminAuthListener() {
-            if (!currentUser) {
-                // Brugeren er logget ud
-                isAdmin = false;
-                updateAdminUI(false);
-                return;
-            }
-            
-            // Hvis brugeren er logget ind (enten anonymt eller Google)
-            if (currentUser.isAnonymous) {
-                 isAdmin = false;
-                 updateAdminUI(false);
-                 return;
-            }
-
-            // Lyt til admin-listen i databasen
-            onSnapshot(doc(db, ADMINS_DOC_PATH), (docSnap) => {
-                if (docSnap.exists()) {
-                    allowedAdmins = docSnap.data().allowed_emails || [];
-                } else {
-                    // Hvis admin-dokumentet ikke findes, opret det med den første admin
+            // RETTET: Brug getDoc til at læse admins én gang for at undgå permissions-fejl.
+            getDoc(doc(db, ADMINS_DOC_PATH)).then(docSnap => {
+                let data = docSnap.exists() ? docSnap.data() : null;
+                
+                if (!data || !data.allowed_emails || data.allowed_emails.length === 0) {
                     allowedAdmins = INITIAL_CONTENT.allowed_emails;
-                    setDoc(doc(db, ADMINS_DOC_PATH), { allowed_emails: allowedAdmins }).catch(console.error);
+                    if (!docSnap.exists()) {
+                         setDoc(doc(db, ADMINS_DOC_PATH), { allowed_emails: allowedAdmins }).catch(console.error);
+                    }
+                } else {
+                    allowedAdmins = data.allowed_emails;
                 }
                 
-                // Tjek om den aktuelle bruger er admin
-                const isUserAdmin = checkAdminStatus(currentUser.email);
-                isAdmin = isUserAdmin;
-                updateAdminUI(isUserAdmin);
+                // Opdater Admin List UI
+                if (isAdmin) {
+                    updateAdminListUI();
+                }
                 
-            }, (error) => {
-                console.error("Error fetching admins:", error);
-                isAdmin = false;
-                updateAdminUI(false);
-            });
+            }).catch(console.error); 
         }
 
         function updateAdminUI(loggedInAsAdmin) {
             const adminPanel = document.getElementById('admin-panel');
             const adminAuthButton = document.getElementById('admin-auth-button');
-            const adminEmailDisplay = document.getElementById('admin-email');
             
             adminAuthButton.innerHTML = `<i data-lucide="${loggedInAsAdmin ? 'log-out' : 'shield'}" class="w-5 h-5"></i>`;
-            adminAuthButton.title = loggedInAsAdmin ? 'Log ud' : 'Admin Login';
+            adminAuthButton.title = loggedInAsAdmin ? 'Luk Admin Panel' : 'Åbn Admin Panel';
             
             if (loggedInAsAdmin) {
-                adminPanel.style.display = 'block';
-                adminEmailDisplay.textContent = currentUser.email;
+                adminPanel.classList.add('active'); // Brug classlist til at tvinge synlighed
                 addAdminEditListeners();
                 updateAdminListUI();
             } else {
-                adminPanel.style.display = 'none';
+                adminPanel.classList.remove('active');
                 removeAdminEditListeners();
             }
             lucide.createIcons();
@@ -764,49 +873,104 @@
         // --- Content Management (CRUD) ---
 
         // 1. Initial Fetch og Listener for Hovedindhold
-        function setupContentListeners() {
-            if (!db) return; // Sikkerhedstjek
+        async function setupContentListeners() {
+            if (!db) return; 
             
             const docRef = doc(db, CONTENT_DOC_PATH);
             
-            // Tjek om indholdet eksisterer ved første load
-            getDoc(docRef).then(docSnap => {
-                if (!docSnap.exists()) {
-                    // Opret initialt indhold
-                    setDoc(docRef, INITIAL_CONTENT)
-                        .then(() => console.log("Initial content created."))
-                        .catch(err => console.error("Error creating initial content:", err));
-                }
-            });
-
-            // Lyt efter ændringer i indholdet
-            onSnapshot(docRef, (docSnap) => {
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    // Opdater front-end elementer
-                    document.getElementById('hero_h1').textContent = data.hero_h1 || "Velkommen til Kirospirit";
-                    document.getElementById('hero_p').textContent = data.hero_p || "Moderne kiropraktik og helhedsorienteret behandling...";
-                    document.getElementById('birgit_quote').textContent = data.birgit_quote || "Henter citat...";
-                    
-                    // Opdater Admin UI redigeringsfelter
-                    if (isAdmin) {
-                        document.getElementById('edit-hero_h1').textContent = data.hero_h1 || "";
-                        document.getElementById('edit-hero_p').textContent = data.hero_p || "";
-                        document.getElementById('edit-birgit_quote').textContent = data.birgit_quote || "";
-                    }
-                }
-            }, console.error);
+            // Brug getDoc for engangshentning
+            const docSnap = await getDoc(docRef).catch(console.error);
             
-            // Lyt til Nyheder
+            let data = {};
+            if (docSnap && docSnap.exists()) {
+                data = docSnap.data();
+            } else {
+                 // Hvis dokumentet ikke findes eller vi ikke kan læse det, opret det og brug initialt indhold
+                 await setDoc(docRef, INITIAL_CONTENT).catch(console.error);
+                 data = INITIAL_CONTENT;
+            }
+            
+            // Gem alle kontaktinfo for brug i kontaktformularen
+            contactInfo = {
+                recipient: data.contact_recipient || INITIAL_CONTENT.contact_recipient,
+                email: data.contact_email || INITIAL_CONTENT.contact_email,
+                phone: data.contact_phone || INITIAL_CONTENT.contact_phone,
+                facebook: data.social_facebook || INITIAL_CONTENT.social_facebook,
+                instagram: data.social_instagram || INITIAL_CONTENT.social_instagram,
+                news_h2: data.news_h2 || INITIAL_CONTENT.news_h2,
+                news_layout_cols: data.news_layout_cols || INITIAL_CONTENT.news_layout_cols, // NYT
+                hero_h1: data.hero_h1 || INITIAL_CONTENT.hero_h1,
+                hero_p: data.hero_p || INITIAL_CONTENT.hero_p,
+                birgit_quote: data.birgit_quote || INITIAL_CONTENT.birgit_quote
+            };
+
+            // Opdater front-end elementer med fallback
+            document.getElementById('hero_h1').textContent = contactInfo.hero_h1;
+            document.getElementById('hero_p').textContent = contactInfo.hero_p;
+            document.getElementById('birgit_quote').textContent = contactInfo.birgit_quote;
+            document.getElementById('news_h2').textContent = contactInfo.news_h2; 
+            
+            // Opdater Kontakt UI
+            document.getElementById('contact_phone_link').textContent = contactInfo.phone;
+            document.getElementById('contact_phone_link').href = `tel:${contactInfo.phone.replace(/\s/g, "")}`;
+            
+            document.getElementById('contact_email_link').textContent = contactInfo.email;
+            document.getElementById('contact_email_link').href = `mailto:${contactInfo.email}`;
+            
+            document.getElementById('social_facebook_link').href = contactInfo.facebook;
+            document.getElementById('social_instagram_link').href = contactInfo.instagram;
+            
+            // Opdater Admin UI redigeringsfelter
+            if (isAdmin) {
+                document.getElementById('edit-hero_h1').textContent = contactInfo.hero_h1;
+                document.getElementById('edit-hero_p').textContent = contactInfo.hero_p;
+                document.getElementById('edit-birgit_quote').textContent = contactInfo.birgit_quote;
+                document.getElementById('edit-news_h2').textContent = contactInfo.news_h2; 
+                
+                document.getElementById('edit-contact_recipient').textContent = contactInfo.recipient;
+                document.getElementById('edit-contact_email').textContent = contactInfo.email;
+                document.getElementById('edit-contact_phone').textContent = contactInfo.phone;
+                document.getElementById('edit-social_facebook').textContent = contactInfo.facebook;
+                document.getElementById('edit-social_instagram').textContent = contactInfo.instagram;
+
+                // NYT: Sæt layout controller
+                const layoutControl = document.getElementById('layout-control');
+                if (layoutControl) {
+                    layoutControl.value = contactInfo.news_layout_cols;
+                }
+            }
+            
+            // Læs Nyheder (engangs)
             const q = query(collection(db, NEWS_COLLECTION_PATH), orderBy("timestamp", "desc"));
-            onSnapshot(q, (querySnapshot) => {
-                const newsItems = [];
-                querySnapshot.forEach((doc) => {
+            const querySnapshot = await getDocs(q).catch(console.error);
+
+            const newsItems = [];
+            if (querySnapshot) {
+                 querySnapshot.forEach((doc) => {
                     newsItems.push({ id: doc.id, ...doc.data() });
                 });
-                renderNewsItems(newsItems);
-                renderNewsList(newsItems);
-            }, console.error);
+            }
+            renderNewsItems(newsItems, contactInfo.news_layout_cols);
+            renderNewsList(newsItems);
+        }
+        
+        // --- NY FUNKTION: Opdaterer Layout Værdien i DB ---
+        window.updateNewsLayout = async function(cols) {
+            if (!isAdmin || !db) return;
+            
+            const status = document.getElementById('layout-status');
+            status.textContent = 'Gemmer layout...';
+            
+            const docRef = doc(db, CONTENT_DOC_PATH);
+            try {
+                await updateDoc(docRef, { news_layout_cols: cols });
+                status.textContent = `Layout gemt! ${cols} kolonner.`;
+                // Opdater indholdet manuelt for at vise de nye kolonner
+                await setupContentListeners(); 
+            } catch (error) {
+                 status.textContent = `Fejl: Kunne ikke gemme layout. ${error.message}`;
+            }
+             setTimeout(() => { status.textContent = ''; }, 3000);
         }
         
         // 2. Redigering af Hovedindhold (Modal)
@@ -854,7 +1018,7 @@
 
             const input = document.getElementById('modal-content-input');
             const status = document.getElementById('modal-status');
-            const saveBtn = document.getElementById('modal-save-button');
+            const saveBtn = document.getElementById('modal-save-button'); // Hent knap
             
             const oldValue = saveBtn.textContent;
             saveBtn.textContent = 'Gemmer...';
@@ -868,6 +1032,8 @@
                 status.textContent = 'Indhold opdateret!';
                 status.classList.remove('text-red-600');
                 status.classList.add('text-green-600');
+                // Efter succesfuld skrivning, genindlæs indholdet manuelt (da vi ikke bruger onSnapshot)
+                await setupContentListeners(); 
                 setTimeout(() => closeModal(), 1000);
             } catch (error) {
                 console.error("Fejl ved opdatering:", error);
@@ -925,6 +1091,7 @@
             const body = document.getElementById('news-body').value.trim();
             const mediaUrl = document.getElementById('news-media-url').value.trim();
             const status = document.getElementById('news-modal-status');
+            const saveBtn = document.getElementById('news-save-button'); 
             
             if (!title || !body) {
                 status.textContent = "Titel og brødtekst er påkrævet.";
@@ -938,6 +1105,10 @@
                 timestamp: new Date().toISOString()
             };
             
+            const oldValue = saveBtn.textContent; 
+            saveBtn.textContent = 'Gemmer...';
+            saveBtn.disabled = true;
+
             status.textContent = 'Gemmer...';
             
             try {
@@ -950,12 +1121,17 @@
                 }
                 status.classList.remove('text-red-600');
                 status.classList.add('text-green-600');
+                // Efter succesfuld skrivning, genindlæs indholdet manuelt (da vi ikke bruger onSnapshot)
+                await setupContentListeners(); 
                 setTimeout(() => closeNewsModal(), 1000);
             } catch (error) {
                 console.error("Fejl ved gem opdatering:", error);
                 status.textContent = 'Fejl: Kunne ikke gemme opslaget.';
                 status.classList.remove('text-green-600');
                 status.classList.add('text-red-600');
+            } finally {
+                saveBtn.textContent = oldValue; 
+                saveBtn.disabled = false;
             }
         }
         
@@ -971,6 +1147,8 @@
             try {
                 await deleteDoc(doc(db, NEWS_COLLECTION_PATH, currentNewsId));
                 status.textContent = "Opslag slettet!";
+                // Efter sletning, genindlæs indholdet manuelt (da vi ikke bruger onSnapshot)
+                await setupContentListeners(); 
                 closeNewsModal();
             } catch (error) {
                 console.error("Fejl ved sletning:", error);
@@ -980,6 +1158,8 @@
         
         function renderNewsList(items) {
              const list = document.getElementById('news-list');
+             if (!list) return; // Sikkerhedstjek
+             
              list.innerHTML = '';
 
              if (items.length === 0) {
@@ -988,48 +1168,110 @@
              }
 
              items.forEach(item => {
+                 // Formatér dato
+                 const date = item.timestamp ? new Date(item.timestamp).toLocaleDateString('da-DK', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+                 
                  const li = document.createElement('li');
                  li.className = 'flex justify-between items-center p-3 bg-white rounded-lg shadow-sm border border-gray-100 cursor-pointer hover:bg-gray-50 transition';
-                 li.innerHTML = `
-                     <span class="font-medium text-gray-800 truncate">${item.title}</span>
-                     <button onclick="openNewsModal({ id: '${item.id}', title: '${item.title.replace(/'/g, "\\'")}', body: '${item.body.replace(/'/g, "\\'")}', media_url: '${item.media_url || ''}' })" class="text-kirospirit hover:text-secondary-color ml-4 flex-shrink-0">
-                        <i data-lucide="edit" class="w-4 h-4"></i>
-                     </button>
-                 `;
+                 
+                 // Titel + Dato element
+                 const span = document.createElement('span');
+                 span.className = 'font-medium text-gray-800 truncate';
+                 span.textContent = `${item.title} (${date})`;
+
+                 // Rediger knap
+                 const editBtn = document.createElement('button');
+                 editBtn.className = 'text-kirospirit hover:text-secondary-color ml-4 flex-shrink-0';
+                 editBtn.innerHTML = '<i data-lucide="edit" class="w-4 h-4"></i>';
+                 
+                 // Direkte onclick handler med hele item-objektet
+                 editBtn.onclick = () => openNewsModal(item);
+
+                 li.appendChild(span);
+                 li.appendChild(editBtn);
                  list.appendChild(li);
              });
              lucide.createIcons();
         }
         
-        function renderNewsItems(items) {
+        function renderNewsItems(items, layoutCols) {
             const display = document.getElementById('news-display');
+            if (!display) return; // Sikkerhedstjek
+            
             display.innerHTML = '';
             
             if (items.length === 0) {
                 display.innerHTML = '<p class="text-gray-500 italic md:col-span-3 text-center">Ingen nyheder fundet.</p>';
                 return;
             }
+            
+            // NYT: Opdater grid-klasser baseret på layoutCols (1, 2 eller 3)
+            // Vi tvinger mobile til 1 kolonne, tablet til 2, og desktop til valgte cols
+            display.className = `grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-${layoutCols}`;
 
             items.forEach(item => {
                 let mediaHtml = '';
+                
                 if (item.media_url) {
-                    // Simpel media-visning, da direct embed er svært
-                    const url = item.media_url;
-                    const isInstagram = url.includes('instagram.com');
-                    const isFacebook = url.includes('facebook.com');
+                    const mediaContent = item.media_url.trim();
 
-                    mediaHtml = `
-                        <a href="${url}" target="_blank" class="block w-full bg-gray-100 text-center py-4 rounded-lg mt-4 text-kirospirit font-semibold hover:bg-gray-200 transition">
-                            <i data-lucide="${isInstagram ? 'instagram' : (isFacebook ? 'facebook' : 'link')}" class="w-6 h-6 inline-block mr-2"></i> 
-                            Se ${isInstagram ? 'Instagram Video' : (isFacebook ? 'Facebook Opslag' : 'Medie Link')}
-                        </a>
-                    `;
+                    if (mediaContent.startsWith('<iframe')) {
+                        // FIX: Henter width og height fra embed-koden for at beregne aspect ratio
+                        const widthMatch = mediaContent.match(/width="(\d+)"/);
+                        const heightMatch = mediaContent.match(/height="(\d+)"/);
+                        
+                        let aspectRatioPadding = '56.25%'; // Default 16:9
+
+                        if (widthMatch && heightMatch) {
+                            const width = parseInt(widthMatch[1]);
+                            const height = parseInt(heightMatch[1]);
+                            if (width > 0) {
+                                aspectRatioPadding = ((height / width) * 100).toFixed(2) + '%';
+                            }
+                        }
+
+                        // BRUGER NU aspect-ratio-box med den beregnede padding-bottom
+                        mediaHtml = `<div class="aspect-ratio-box" style="padding-bottom: ${aspectRatioPadding};">
+                                        ${mediaContent}
+                                     </div>`;
+                        
+                        // Ekstra JS for at sikre at iframe's width/height attributter fjernes, så den bruger CSS (100% bredde)
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = mediaHtml;
+                        const iframe = tempDiv.querySelector('iframe');
+                        
+                        if (iframe) {
+                            iframe.removeAttribute('width');
+                            iframe.removeAttribute('height');
+                            // Iframe vil nu automatisk følge 100% width/height af aspect-ratio-box
+                        }
+                        mediaHtml = tempDiv.innerHTML;
+
+                    } else if (mediaContent.startsWith('http')) {
+                        // Hvis det kun er en simpel URL (f.eks. til YouTube eller et Instagram opslag uden embed code)
+                         const url = mediaContent;
+                         const isInstagram = url.includes('instagram.com');
+                         const isFacebook = url.includes('facebook.com');
+
+                        mediaHtml = `
+                            <a href="${url}" target="_blank" class="block w-full bg-gray-100 text-center py-4 rounded-lg mt-4 text-kirospirit font-semibold hover:bg-gray-200 transition">
+                                <i data-lucide="${isInstagram ? 'instagram' : (isFacebook ? 'facebook' : 'link')}" class="w-6 h-6 inline-block mr-2"></i> 
+                                Se ${isInstagram ? 'Instagram Opslag' : (isFacebook ? 'Facebook Opslag' : 'Medie Link')}
+                            </a>
+                        `;
+                    }
                 }
 
                 const date = item.timestamp ? new Date(item.timestamp).toLocaleDateString('da-DK', { day: 'numeric', month: 'short' }) : 'Ukendt Dato';
 
                 const card = document.createElement('div');
-                card.className = 'bg-white rounded-xl shadow-lg p-6 border-t-4 border-secondary-color hover:shadow-xl transition duration-300 flex flex-col h-full';
+                // NYT: Tilføjelse af col-span-X hvis layout er 1 (fuld bredde)
+                let colSpanClass = '';
+                if (layoutCols === '1') {
+                    colSpanClass = 'lg:col-span-3 md:col-span-2'; 
+                }
+
+                card.className = `bg-white rounded-xl shadow-md p-6 border-t-4 border-secondary-color hover:shadow-xl transition duration-300 flex flex-col h-full ${colSpanClass}`;
                 card.innerHTML = `
                     <div class="flex justify-between items-center mb-4">
                         <h4 class="text-xl font-bold text-gray-900">${item.title}</h4>
@@ -1047,6 +1289,8 @@
 
         function updateAdminListUI() {
             const list = document.getElementById('admin-list');
+            if (!list) return; // Sikkerhedstjek
+            
             list.innerHTML = '';
 
             if (allowedAdmins.length === 0) {
@@ -1069,10 +1313,13 @@
         }
 
         async function updateAdminListInDB(newAdminList) {
+            
+            if (!db) return; // Kan ikke gemme uden db
+            
             try {
                 await updateDoc(doc(db, ADMINS_DOC_PATH), { allowed_emails: newAdminList });
                 showAdminStatus("Admin liste opdateret!", "bg-green-100 text-green-800");
-                // onSnapshot lytteren opdaterer automatisk UI'en
+                await setupAdminAuthListener(); // Genindlæs admins
             } catch (error) {
                 console.error("Fejl ved admin opdatering:", error);
                 showAdminStatus("Fejl: Kunne ikke opdatere admin listen i databasen.", "bg-red-100 text-red-800");
@@ -1080,6 +1327,8 @@
         }
 
         window.addAdmin = function() {
+            if (!isAdmin) return;
+            
             const emailInput = document.getElementById('new-admin-email');
             const newEmail = emailInput.value.trim().toLowerCase();
 
@@ -1098,18 +1347,64 @@
         }
 
         window.removeAdmin = function(emailToRemove) {
+            if (!isAdmin) return;
+            
             if (allowedAdmins.length <= 1) {
                 showAdminStatus("Kan ikke slette den sidste administrator.", "bg-red-100 text-red-800");
                 return;
-            }
-            if (emailToRemove === currentUser.email) {
-                 if (!confirm(`ADVARSEL! Er du sikker på, at du vil fjerne dig selv (${emailToRemove}) som administrator? Du mister adgangen øjeblikkeligt.`)) return;
             }
             
             const newAdminList = allowedAdmins.filter(email => email !== emailToRemove);
             updateAdminListInDB(newAdminList);
         }
         
+        // --- Kontaktformular Håndtering (NY) ---
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const statusMessage = document.getElementById('form-status-message');
+            const submitBtn = document.getElementById('contact-submit-btn');
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            
+            const recipientEmail = contactInfo.recipient;
+            
+            // Simuler afsendelse - I en rigtig app skal dette erstattes med en backend-kald (Cloud Function/PHP)
+            
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span>Sender...</span><i data-lucide="loader-2" class="ml-2 w-5 h-5 animate-spin"></i>';
+            lucide.createIcons();
+
+            console.log("SIMULERING: Kontaktformular sendt til: " + recipientEmail);
+            console.log("Data:", data);
+            
+            setTimeout(() => {
+                // Simuler succes
+                const success = true; 
+                statusMessage.classList.remove('hidden', 'bg-red-50', 'text-red-800', 'border-red-200');
+                
+                if (success) {
+                    statusMessage.classList.add('bg-green-50', 'text-green-800', 'border-green-200');
+                    statusMessage.innerHTML = '<i data-lucide="check-circle-2" class="w-5 h-5 mr-3 text-green-600"></i> Tak! Din besked er modtaget. Vi svarer dig hurtigst muligt.';
+                    form.reset();
+                } else {
+                    statusMessage.classList.add('bg-red-50', 'text-red-800', 'border-red-200');
+                    statusMessage.innerHTML = '<i data-lucide="alert-circle" class="w-5 h-5 mr-3 text-red-600"></i> Fejl: Kunne ikke sende beskeden. Prøv venligst igen.';
+                }
+
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>Send Forespørgsel</span><i data-lucide="send" class="ml-2 w-5 h-5"></i>';
+                lucide.createIcons();
+                
+                setTimeout(() => {
+                    statusMessage.classList.add('hidden');
+                }, 8000);
+            }, 1500); // 1.5 sekunders forsinkelse
+        }
+
+
         // --- Eksponering af globale funktioner til HTML (nødvendigt for onclick) ---
         window.handleAdminAuth = handleAdminAuth;
         window.showPage = showPage;
@@ -1120,7 +1415,8 @@
         window.closeNewsModal = closeNewsModal;
         window.saveNewsItem = saveNewsItem;
         window.deleteNewsItem = deleteNewsItem;
-
+        window.handleFormSubmit = handleFormSubmit; // NY
+        window.updateNewsLayout = updateNewsLayout;
         
         // --- Eksisterende HTML Logik (Opdateret til window.funktion) ---
 
@@ -1150,20 +1446,21 @@
 
         // Funktion til at vise den valgte side og opdatere navigationen
         function showPage(pageId) {
+            // Sørg for at funktionen ikke kører, før DOM-elementer er klar
+            const activeSection = document.getElementById(pageId);
+            if (!activeSection) return; 
+
             // Skjul alle sektioner
             document.querySelectorAll('.page-section').forEach(section => {
                 section.classList.remove('active');
             });
 
             // Vis den valgte sektion
-            const activeSection = document.getElementById(pageId);
-            if (activeSection) {
-                activeSection.classList.add('active');
+            activeSection.classList.add('active');
                 
-                // Opdater URL hash
-                history.pushState(null, '', '#' + pageId);
-                window.scrollTo(0, 0); // Rul til toppen af siden ved skift
-            }
+            // Opdater URL hash
+            history.pushState(null, '', '#' + pageId);
+            window.scrollTo(0, 0); // Rul til toppen af siden ved skift
             
             // Opdater navigationens visuelle tilstand
             updateNavActiveState(pageId);
@@ -1201,9 +1498,6 @@
             const newPage = window.location.hash.substring(1) || 'hjem';
             showPage(newPage);
         });
-        
-        // Simuleret håndtering af kontaktformular (fjernet/erstattet med booking-plads)
-        // Funktionen er fjernet, da "kontakt" nu er forbeholdt booking systemet.
         
         // --- Start Firebase ---
         initFirebase();

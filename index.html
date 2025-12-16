@@ -25,7 +25,7 @@
         .bg-kirospirit { background-color: var(--primary-color); }
         .hover-kirospirit:hover { background-color: var(--secondary-color); }
         
-        /* OPDATERET: Hero Baggrundsbillede */
+        /* Hero Baggrundsbillede */
         .hero-bg {
             background-image: url('https://kirospirit.dk/wp-content/uploads/2025/01/DSC05145-2048x1365.jpg');
             background-size: cover;
@@ -33,6 +33,21 @@
         }
         /* Tilpas ikoner */
         .lucide { width: 1.5rem; height: 1.5rem; }
+        
+        /* Skjul alle sider som standard. De vises via JS. */
+        .page-section {
+            display: none;
+            /* Fjernede min-height for at lade indholdet bestemme højden */
+        }
+        /* Gør den aktive side synlig */
+        .page-section.active {
+            display: block;
+        }
+        
+        /* Specifik styling til at sikre Hero-sektionen tager minimum plads, når andre sektioner er skjult */
+        #hjem-hero {
+            min-height: 650px;
+        }
     </style>
 </head>
 <body>
@@ -41,22 +56,22 @@
     <header class="sticky top-0 z-50 bg-white shadow-md bg-opacity-95 backdrop-blur-sm">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
             
-            <!-- OPDATERET: Logo Billede -->
-            <a href="#hjem" class="flex items-center">
-                <img src="https://kirospirit.dk/wp-content/uploads/2024/12/cropped-Logo.png" alt="Kirospirit Logo" class="h-10 sm:h-14 w-auto">
+            <!-- Logo Billede (OPDATERET LINK) -->
+            <a href="#hjem" onclick="showPage('hjem')" class="flex items-center cursor-pointer">
+                <img src="https://i.imgur.com/2Jih3hS.png" alt="Kirospirit Logo" class="h-10 sm:h-14 w-auto">
             </a>
             
             <!-- Desktop Navigation -->
             <div class="hidden md:flex space-x-8 items-center">
-                <a href="#hjem" class="text-gray-600 hover:text-kirospirit transition duration-300 font-medium text-sm uppercase tracking-wider">Hjem</a>
-                <a href="#omos" class="text-gray-600 hover:text-kirospirit transition duration-300 font-medium text-sm uppercase tracking-wider">Om Os</a>
-                <a href="#behandlinger" class="text-gray-600 hover:text-kirospirit transition duration-300 font-medium text-sm uppercase tracking-wider">Behandlinger</a>
-                <a href="#kontakt" class="text-gray-600 hover:text-kirospirit transition duration-300 font-medium text-sm uppercase tracking-wider">Kontakt</a>
+                <a href="#hjem" onclick="showPage('hjem')" data-page="hjem" class="nav-link text-gray-600 hover:text-kirospirit transition duration-300 font-medium text-sm uppercase tracking-wider">Hjem</a>
+                <a href="#birgit" onclick="showPage('birgit')" data-page="birgit" class="nav-link text-gray-600 hover:text-kirospirit transition duration-300 font-medium text-sm uppercase tracking-wider">Mød Birgit</a> 
+                <a href="#behandlinger" onclick="showPage('behandlinger')" data-page="behandlinger" class="nav-link text-gray-600 hover:text-kirospirit transition duration-300 font-medium text-sm uppercase tracking-wider">Behandlinger</a>
+                <a href="#kontakt" onclick="showPage('kontakt')" data-page="kontakt" class="nav-link text-gray-600 hover:text-kirospirit transition duration-300 font-medium text-sm uppercase tracking-wider">Kontakt</a>
             </div>
 
             <!-- CTA Button (Desktop) -->
             <div class="hidden md:block">
-                <a href="#kontakt" class="bg-kirospirit text-white px-6 py-2.5 rounded-full font-semibold shadow-md hover-kirospirit transition duration-300 text-sm uppercase tracking-wide">Book Tid Online</a>
+                <a href="#kontakt" onclick="showPage('kontakt')" class="bg-kirospirit text-white px-6 py-2.5 rounded-full font-semibold shadow-md hover-kirospirit transition duration-300 text-sm uppercase tracking-wide">Book Tid Online</a>
             </div>
 
             <!-- Mobil Menu Knap -->
@@ -67,95 +82,148 @@
         
         <!-- Mobil Menu (Skjult som standard) -->
         <div id="mobile-menu" class="hidden md:hidden absolute w-full bg-white shadow-xl py-4 border-t border-gray-100">
-            <a href="#hjem" class="block px-6 py-3 text-gray-700 font-medium hover:bg-bg-color hover:text-kirospirit transition" onclick="toggleMenu()">Hjem</a>
-            <a href="#omos" class="block px-6 py-3 text-gray-700 font-medium hover:bg-bg-color hover:text-kirospirit transition" onclick="toggleMenu()">Om Os</a>
-            <a href="#behandlinger" class="block px-6 py-3 text-gray-700 font-medium hover:bg-bg-color hover:text-kirospirit transition" onclick="toggleMenu()">Behandlinger</a>
-            <a href="#kontakt" class="block px-6 py-3 text-gray-700 font-medium hover:bg-bg-color hover:text-kirospirit transition" onclick="toggleMenu()">Kontakt</a>
+            <a href="#hjem" onclick="showPage('hjem'); toggleMenu();" class="block px-6 py-3 text-gray-700 font-medium hover:bg-bg-color hover:text-kirospirit transition">Hjem</a>
+            <a href="#birgit" onclick="showPage('birgit'); toggleMenu();" class="block px-6 py-3 text-gray-700 font-medium hover:bg-bg-color hover:text-kirospirit transition">Mød Birgit</a> 
+            <a href="#behandlinger" onclick="showPage('behandlinger'); toggleMenu();" class="block px-6 py-3 text-gray-700 font-medium hover:bg-bg-color hover:text-kirospirit transition">Behandlinger</a>
+            <a href="#kontakt" onclick="showPage('kontakt'); toggleMenu();" class="block px-6 py-3 text-gray-700 font-medium hover:bg-bg-color hover:text-kirospirit transition">Kontakt</a>
             <div class="px-6 pt-4">
-                 <a href="#kontakt" class="block text-center w-full bg-kirospirit text-white px-4 py-3 rounded-full font-semibold hover-kirospirit shadow-md transition" onclick="toggleMenu()">Book Tid Online</a>
+                 <a href="#kontakt" onclick="showPage('kontakt'); toggleMenu();" class="block text-center w-full bg-kirospirit text-white px-4 py-3 rounded-full font-semibold hover-kirospirit shadow-md transition">Book Tid Online</a>
             </div>
         </div>
     </header>
     
-    <main>
+    <main id="main-content">
         
-        <!-- Sektion 1: Hero (Hjem) - Nu med det nye billede og overlay for læsbarhed -->
-        <section id="hjem" class="hero-bg text-white flex items-center justify-center min-h-[650px] text-center bg-gray-900 bg-opacity-60 bg-blend-overlay">
-            <div class="p-8 max-w-4xl m-4">
-                <h1 class="text-5xl sm:text-7xl font-extrabold mb-6 leading-tight drop-shadow-lg">
-                    Velkommen til <span class="text-secondary-color">Kirospirit</span>
-                </h1>
-                <p class="text-xl sm:text-3xl font-medium mb-10 opacity-95 drop-shadow-md max-w-2xl mx-auto">
-                    Moderne kiropraktik og helhedsorienteret behandling i hjertet af København.
-                </p>
-                <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-                    <a href="#kontakt" class="bg-kirospirit text-white border-2 border-kirospirit px-10 py-4 rounded-full text-lg font-bold uppercase tracking-wider shadow-xl transform hover:scale-105 transition duration-300">
-                        Book Konsultation
-                    </a>
-                    <a href="#behandlinger" class="bg-transparent text-white border-2 border-white px-10 py-4 rounded-full text-lg font-bold uppercase tracking-wider shadow-xl hover:bg-white hover:text-gray-900 transition duration-300">
-                        Se Behandlinger
-                    </a>
+        <!-- Sektion 1: Hjem - Indeholder Hero og Behandlinger Overblik -->
+        <section id="hjem" class="page-section active">
+            
+            <!-- Del 1: Hero/Velkomst -->
+            <div id="hjem-hero" class="hero-bg text-white flex items-center justify-center min-h-[650px] text-center bg-gray-900 bg-opacity-60 bg-blend-overlay">
+                <div class="p-8 max-w-4xl m-4">
+                    <h1 class="text-5xl sm:text-7xl font-extrabold mb-6 leading-tight drop-shadow-lg">
+                        Velkommen til <span class="text-secondary-color">Kirospirit</span>
+                    </h1>
+                    <p class="text-xl sm:text-3xl font-medium mb-10 opacity-95 drop-shadow-md max-w-2xl mx-auto">
+                        Moderne kiropraktik og helhedsorienteret behandling i hjertet af København.
+                    </p>
+                    <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+                        <a href="#kontakt" onclick="showPage('kontakt')" class="bg-kirospirit text-white border-2 border-kirospirit px-10 py-4 rounded-full text-lg font-bold uppercase tracking-wider shadow-xl transform hover:scale-105 transition duration-300">
+                            Book Konsultation
+                        </a>
+                        <a href="#behandlinger" onclick="showPage('behandlinger')" class="bg-transparent text-white border-2 border-white px-10 py-4 rounded-full text-lg font-bold uppercase tracking-wider shadow-xl hover:bg-white hover:text-gray-900 transition duration-300">
+                            Se Behandlinger
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Del 2: Behandlinger Overblik (Synlig på forsiden) -->
+            <div id="behandlinger-overblik" class="py-20 bg-gray-50">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h2 class="text-base text-kirospirit font-bold tracking-wide uppercase">Vores Fokusområder</h2>
+                        <p class="mt-2 text-4xl font-extrabold text-gray-900 sm:text-5xl">
+                            Specialiserede Behandlinger
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                        
+                        <!-- Behandling 1: Kiropraktik -->
+                        <div class="bg-white rounded-2xl shadow-md p-8 flex flex-col items-center text-center border-t-4 border-kirospirit hover:shadow-xl transition duration-300">
+                             <div class="bg-bg-color p-3 rounded-full mb-4">
+                                <i data-lucide="bone" class="w-8 h-8 text-kirospirit"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Årsagsorienteret Kiropraktik</h3>
+                            <p class="text-gray-600 text-sm">Fokus på nervesystemet og kroppens evne til selvhelbredelse.</p>
+                        </div>
+
+                        <!-- Behandling 2: Nålebehandling / Dry Needling -->
+                        <div class="bg-white rounded-2xl shadow-md p-8 flex flex-col items-center text-center border-t-4 border-secondary-color hover:shadow-xl transition duration-300">
+                            <div class="bg-bg-color p-3 rounded-full mb-4">
+                                <i data-lucide="needle" class="w-8 h-8 text-secondary-color"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Dry Needling / Nålebehandling</h3>
+                            <p class="text-gray-600 text-sm">Målrettet frigørelse af triggerpunkter for dybdegående smertelindring.</p>
+                        </div>
+                        
+                        <!-- Behandling 3: Hovedpine & Migræne -->
+                        <div class="bg-white rounded-2xl shadow-md p-8 flex flex-col items-center text-center border-t-4 border-kirospirit hover:shadow-xl transition duration-300">
+                            <div class="bg-bg-color p-3 rounded-full mb-4">
+                                <i data-lucide="brain-circuit" class="w-8 h-8 text-kirospirit"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Hovedpine & Migræne</h3>
+                            <p class="text-gray-600 text-sm">Neurologisk fokus på nakke og ryg som kilde til hovedpine.</p>
+                        </div>
+                        
+                        <!-- CTA for at se alle detaljer -->
+                        <div class="lg:col-span-3 text-center pt-8">
+                            <a href="#behandlinger" onclick="showPage('behandlinger')" class="inline-flex items-center px-8 py-3 rounded-full font-bold text-lg shadow-md bg-white border-2 border-kirospirit text-kirospirit hover:bg-kirospirit hover:text-white transition duration-300">
+                                Se Alle 6 Behandlinger i Detaljer
+                                <i data-lucide="arrow-right" class="ml-2 w-5 h-5"></i>
+                            </a>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Sektion 2: Om Os (About Us) -->
-        <section id="omos" class="py-24 bg-white">
+        <!-- Sektion 2: Mød Birgit (Om Os) -->
+        <section id="birgit" class="page-section py-24 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="lg:text-center mb-16">
-                    <h2 class="text-base text-kirospirit font-bold tracking-wide uppercase">Om Klinikken</h2>
+                    <h2 class="text-base text-kirospirit font-bold tracking-wide uppercase">Om Kirospirit</h2>
                     <p class="mt-2 text-4xl leading-10 font-extrabold tracking-tight text-gray-900 sm:text-5xl">
-                        Din vej til en krop i balance
-                    </p>
-                    <p class="mt-4 max-w-3xl text-xl text-gray-600 lg:mx-auto">
-                        Hos Kirospirit tror vi på en helhedsorienteret tilgang. Vi behandler ikke kun symptomerne, men finder årsagen for at sikre varige resultater.
+                        Mød Kiropraktor Birgit
                     </p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-                    <!-- Filosofi Kort -->
-                    <div class="p-8 bg-bg-color rounded-2xl hover:shadow-lg transition duration-300 border border-transparent hover:border-secondary-color group">
-                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-kirospirit text-white mb-6 mx-auto group-hover:scale-110 transition">
-                            <i data-lucide="heart-handshake" class="h-8 w-8"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-gray-900 text-center mb-4">Vores Filosofi</h3>
-                        <p class="text-gray-700 text-center leading-relaxed">
-                            Vi kombinerer klassisk kiropraktik med den nyeste viden inden for sundhed for at skabe det bedste forløb for dig.
-                        </p>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-center">
+                    <!-- Billede af Birgit -->
+                    <div class="lg:col-span-1 flex justify-center lg:justify-start">
+                        <img src="https://kirospirit.dk/wp-content/uploads/2025/09/portraetfoto-1-1-2048x2048.jpg" alt="Portræt af Birgit" class="rounded-3xl shadow-2xl w-full max-w-sm lg:max-w-none transform hover:scale-[1.02] transition duration-500 ease-in-out">
                     </div>
 
-                    <!-- Erfaring Kort -->
-                    <div class="p-8 bg-bg-color rounded-2xl hover:shadow-lg transition duration-300 border border-transparent hover:border-secondary-color group">
-                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-kirospirit text-white mb-6 mx-auto group-hover:scale-110 transition">
-                            <i data-lucide="award" class="h-8 w-8"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-gray-900 text-center mb-4">Høj Faglighed</h3>
-                        <p class="text-gray-700 text-center leading-relaxed">
-                            Vores behandlere er autoriserede og holder sig løbende opdateret med efteruddannelse for at sikre højeste kvalitet.
+                    <!-- Tekst om Birgit -->
+                    <div class="lg:col-span-2 space-y-6 text-lg text-gray-700">
+                        <h3 class="text-3xl font-bold text-gray-900">En Helhedsorienteret Tilgang til Sundhed</h3>
+                        
+                        <p class="font-semibold text-kirospirit border-l-4 border-secondary-color pl-4 italic">
+                            "Jeg bruger mine 15 års erfaring som kiropraktor og min viden om, at krop, sind og spirit hænger uløseligt sammen. Behandlingen hos mig er en helhedsbehandling, som hjælper dig med at genfinde balancen i dit liv."
                         </p>
-                    </div>
-                    
-                    <!-- Tryghed Kort -->
-                    <div class="p-8 bg-bg-color rounded-2xl hover:shadow-lg transition duration-300 border border-transparent hover:border-secondary-color group">
-                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-kirospirit text-white mb-6 mx-auto group-hover:scale-110 transition">
-                            <i data-lucide="shield-check" class="h-8 w-8"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-gray-900 text-center mb-4">Trygge Rammer</h3>
-                        <p class="text-gray-700 text-center leading-relaxed">
-                            Vi tager os tid til at lytte til dig i rolige og professionelle omgivelser, så du føler dig i trygge hænder.
+                        
+                        <p>
+                            Birgit er uddannet kiropraktor og har specialiseret sig i at finde de **dybereliggende årsager** til smerte og ubalance. Gennem årene har hun udviklet en unik tilgang, der integrerer nervesystemet, de biomekaniske problematikker og det spirituelle aspekt.
                         </p>
+                        
+                        <p>
+                            Hendes mission er at **behandle hele mennesket**, ikke kun symptomet. Hun skaber varige, positive forandringer i dit liv, ved at hjælpe dig med at forstå og lytte til din krops signaler.
+                        </p>
+
+                        <div class="pt-4 flex flex-wrap gap-4">
+                            <span class="inline-flex items-center rounded-full bg-bg-color px-3 py-1 text-sm font-medium text-kirospirit ring-1 ring-inset ring-kirospirit/20">
+                                <i data-lucide="graduation-cap" class="w-4 h-4 mr-2"></i> Uddannet Kiropraktor
+                            </span>
+                            <span class="inline-flex items-center rounded-full bg-bg-color px-3 py-1 text-sm font-medium text-kirospirit ring-1 ring-inset ring-kirospirit/20">
+                                <i data-lucide="microscope" class="w-4 h-4 mr-2"></i> Årsagsorienteret Fokus
+                            </span>
+                            <span class="inline-flex items-center rounded-full bg-bg-color px-3 py-1 text-sm font-medium text-kirospirit ring-1 ring-inset ring-kirospirit/20">
+                                <i data-lucide="hand-heart" class="w-4 h-4 mr-2"></i> 15+ Års Erfaring
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Sektion 3: Behandlinger (Services) -->
-        <section id="behandlinger" class="py-24 bg-gray-50">
+        <!-- Sektion 3: Behandlinger (Services) - Denne sektion er kun synlig via klik i navigationen -->
+        <section id="behandlinger" class="page-section py-24 bg-gray-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16">
-                    <h2 class="text-base text-kirospirit font-bold tracking-wide uppercase">Vi tilbyder</h2>
+                    <h2 class="text-base text-kirospirit font-bold tracking-wide uppercase">Dybdegående Overblik</h2>
                     <p class="mt-2 text-4xl font-extrabold text-gray-900 sm:text-5xl">
-                        Specialiserede Behandlinger
+                        Vores Specialiserede Tilbud
                     </p>
                 </div>
 
@@ -166,23 +234,23 @@
                             <div class="bg-bg-color p-3 rounded-lg">
                                 <i data-lucide="bone" class="w-8 h-8 text-kirospirit"></i>
                             </div>
-                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Kiropraktik</h3>
+                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Årsagsorienteret Kiropraktik</h3>
                         </div>
                         <p class="text-gray-600 flex-grow leading-relaxed">
-                            Diagnosticering, behandling og forebyggelse af lidelser i bevægeapparatet, med fokus på rygsøjlens funktion og nervesystemet. Effektivt mod ryg- og nakkesmerter.
+                            Vores primære fokus er at justere rygsøjlen blidt for at fjerne interferens i nervesystemet. Dette giver kroppen mulighed for at helbrede sig selv indefra. Vi ser på din holdning, dit nervesystems funktion og de underliggende stressorer.
                         </p>
                     </div>
 
-                    <!-- Behandling 2: Sportsskader -->
-                    <div class="bg-white rounded-2xl shadow-md p-8 hover:shadow-xl transition duration-300 flex flex-col h-full border-t-4 border-kirospirit">
+                    <!-- Behandling 2: Nålebehandling / Dry Needling -->
+                    <div class="bg-white rounded-2xl shadow-md p-8 hover:shadow-xl transition duration-300 flex flex-col h-full border-t-4 border-secondary-color">
                         <div class="flex items-center mb-6">
                             <div class="bg-bg-color p-3 rounded-lg">
-                                <i data-lucide="activity" class="w-8 h-8 text-kirospirit"></i>
+                                <i data-lucide="needle" class="w-8 h-8 text-secondary-color"></i>
                             </div>
-                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Sportsskader</h3>
+                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Dry Needling / Nålebehandling</h3>
                         </div>
                         <p class="text-gray-600 flex-grow leading-relaxed">
-                            Hurtig og effektiv behandling af akutte og kroniske sportsskader. Vi hjælper dig med genoptræning, så du kan vende stærkere tilbage til din sport.
+                            Effektiv behandling af muskelsmerter og spændinger ved hjælp af tynde nåle. Dette målretter triggerpunkter og frigør dybdegående spændinger i muskler og bindevæv. Bruges ofte i kombination med kiropraktik.
                         </p>
                     </div>
                     
@@ -192,46 +260,46 @@
                             <div class="bg-bg-color p-3 rounded-lg">
                                 <i data-lucide="brain-circuit" class="w-8 h-8 text-kirospirit"></i>
                             </div>
-                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Hovedpine & Migræne</h3>
+                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Nervesystemet og Hovedpine</h3>
                         </div>
                         <p class="text-gray-600 flex-grow leading-relaxed">
-                            Mange former for hovedpine stammer fra spændinger i nakke og skuldre. Vi tilbyder målrettet behandling for at lindre og forebygge spændingshovedpine og migræne.
+                            Vi adresserer de neurologiske stressorer og dysfunktioner i nakken, der ofte er den sande kilde til migræne, spændingshovedpine og svimmelhed. Målet er at reducere frekvens og intensitet.
                         </p>
                     </div>
                      <!-- Behandling 4: Graviditet -->
-                     <div class="bg-white rounded-2xl shadow-md p-8 hover:shadow-xl transition duration-300 flex flex-col h-full border-t-4 border-secondary-color lg:col-start-1 lg:col-end-2">
+                     <div class="bg-white rounded-2xl shadow-md p-8 hover:shadow-xl transition duration-300 flex flex-col h-full border-t-4 border-secondary-color">
                         <div class="flex items-center mb-6">
                             <div class="bg-bg-color p-3 rounded-lg">
                                 <i data-lucide="baby" class="w-8 h-8 text-secondary-color"></i>
                             </div>
-                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Gravidbehandling</h3>
+                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Behandling under Graviditet</h3>
                         </div>
                         <p class="text-gray-600 flex-grow leading-relaxed">
-                            Skånsom behandling af graviditetsrelaterede gener som bækkenløsning og rygsmerter, der sikrer dig en bedre graviditet.
+                            Skånsom og sikker kiropraktik til at lindre bækkensmerter, lændegener og forberede kroppen optimalt til fødslen, hvilket støtter både mor og barn. Vi hjælper med at opretholde bækkenbalance.
                         </p>
                     </div>
 
                     <!-- Behandling 5: Spædbørn -->
-                    <div class="bg-white rounded-2xl shadow-md p-8 hover:shadow-xl transition duration-300 flex flex-col h-full border-t-4 border-secondary-color lg:col-start-2 lg:col-end-3">
+                    <div class="bg-white rounded-2xl shadow-md p-8 hover:shadow-xl transition duration-300 flex flex-col h-full border-t-4 border-kirospirit">
                         <div class="flex items-center mb-6">
                             <div class="bg-bg-color p-3 rounded-lg">
-                                <i data-lucide="smile-plus" class="w-8 h-8 text-secondary-color"></i>
+                                <i data-lucide="smile-plus" class="w-8 h-8 text-kirospirit"></i>
                             </div>
-                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Børn & Spædbørn</h3>
+                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Blid Børnekiropraktik</h3>
                         </div>
                         <p class="text-gray-600 flex-grow leading-relaxed">
-                            Blid undersøgelse og behandling af spædbørn og børn. Vi hjælper ofte med problematikker som kolik, skævheder og motorisk uro.
+                            Målrettet og meget blid justering af spædbørn og børn for at adressere problemer relateret til fødselstraumer, kolik, søvnforstyrrelser og motorisk udvikling. Meget skånsomme teknikker.
                         </p>
                     </div>
                     
-                     <!-- Behandling 6: Massage (CTA kort) -->
-                     <div class="bg-kirospirit rounded-2xl shadow-md p-8 hover:shadow-xl transition duration-300 flex flex-col h-full items-center justify-center text-center text-white lg:col-start-3 lg:col-end-4">
-                        <i data-lucide="calendar-check" class="w-16 h-16 mb-6 opacity-90"></i>
-                        <h3 class="text-3xl font-bold mb-4">Er du i tvivl?</h3>
+                     <!-- Behandling 6: Opfølgende Behandling (CTA kort) -->
+                     <div class="bg-kirospirit rounded-2xl shadow-md p-8 hover:shadow-xl transition duration-300 flex flex-col h-full items-center justify-center text-center text-white">
+                        <i data-lucide="hand-heart" class="w-16 h-16 mb-6 opacity-90"></i>
+                        <h3 class="text-3xl font-bold mb-4">Holistisk Velvære</h3>
                         <p class="mb-8 text-lg opacity-95">
-                            Kontakt os for en uforpligtende snak om, hvordan vi kan hjælpe netop dig.
+                            Vi tilbyder også vejledning i livsstil og øvelser for at sikre varig balance i krop, sind og spirit.
                         </p>
-                         <a href="#kontakt" class="bg-white text-kirospirit px-8 py-3 rounded-full font-bold uppercase tracking-wider hover:bg-secondary-color hover:text-white transition">Kontakt Os Nu</a>
+                         <a href="#kontakt" onclick="showPage('kontakt')" class="bg-white text-kirospirit px-8 py-3 rounded-full font-bold uppercase tracking-wider hover:bg-secondary-color hover:text-white transition">Start Din Rejse</a>
                     </div>
 
                 </div>
@@ -239,7 +307,7 @@
         </section>
 
         <!-- Sektion 4: Kontakt (Contact Form) -->
-        <section id="kontakt" class="py-24 bg-white relative overflow-hidden">
+        <section id="kontakt" class="page-section py-24 bg-white relative overflow-hidden">
             <!-- Dekorativ baggrundscirkel -->
             <div class="absolute top-0 left-0 transform -translate-x-1/2 -translate-y-1/2 rounded-full bg-bg-color w-[800px] h-[800px] opacity-50 -z-10"></div>
             
@@ -370,7 +438,7 @@
             <!-- Kolonne 1: Logo & Intro -->
             <div class="flex flex-col items-center md:items-start">
                 <!-- Footer Logo - Lys udgave via CSS filtere -->
-                <img src="https://kirospirit.dk/wp-content/uploads/2024/12/cropped-Logo.png" alt="Kirospirit Logo" class="h-12 w-auto mb-4 brightness-0 invert">
+                <img src="https://i.imgur.com/2Jih3hS.png" alt="Kirospirit Logo" class="h-12 w-auto mb-4 brightness-0 invert">
                 <p class="text-sm leading-relaxed max-w-xs mx-auto md:mx-0">
                     Professionel kiropraktik og sundhedsfremmende behandlinger med fokus på det hele menneske.
                 </p>
@@ -380,10 +448,10 @@
              <div class="flex flex-col items-center md:items-start">
                 <h4 class="text-white text-lg font-bold mb-4 uppercase tracking-wider">Navigation</h4>
                 <ul class="space-y-2">
-                    <li><a href="#hjem" class="hover:text-secondary-color transition">Forside</a></li>
-                    <li><a href="#omos" class="hover:text-secondary-color transition">Om Klinikken</a></li>
-                    <li><a href="#behandlinger" class="hover:text-secondary-color transition">Vores Behandlinger</a></li>
-                    <li><a href="#kontakt" class="hover:text-secondary-color transition">Kontakt & Booking</a></li>
+                    <li><a href="#hjem" onclick="showPage('hjem')" class="hover:text-secondary-color transition">Forside</a></li>
+                    <li><a href="#birgit" onclick="showPage('birgit')" class="hover:text-secondary-color transition">Mød Birgit</a></li> 
+                    <li><a href="#behandlinger" onclick="showPage('behandlinger')" class="hover:text-secondary-color transition">Vores Behandlinger</a></li>
+                    <li><a href="#kontakt" onclick="showPage('kontakt')" class="hover:text-secondary-color transition">Kontakt & Booking</a></li>
                 </ul>
             </div>
 
@@ -428,9 +496,44 @@
         }
         menuButton.addEventListener('click', toggleMenu);
 
-        // Luk mobilmenu når man klikker på et link
-        const mobileLinks = mobileMenu.querySelectorAll('a');
-        mobileLinks.forEach(link => {
+        // --- Multi-page navigationslogik ---
+
+        // Funktion til at vise den valgte side og opdatere navigationen
+        function showPage(pageId) {
+            // Skjul alle sektioner
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Vis den valgte sektion
+            const activeSection = document.getElementById(pageId);
+            if (activeSection) {
+                activeSection.classList.add('active');
+                
+                // Opdater URL hash
+                history.pushState(null, '', '#' + pageId);
+                window.scrollTo(0, 0); // Rul til toppen af siden ved skift
+            }
+            
+            // Opdater navigationens visuelle tilstand
+            updateNavActiveState(pageId);
+        }
+
+        // Funktion til at opdatere den aktive knap i navigationen
+        function updateNavActiveState(pageId) {
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('text-kirospirit', 'font-bold', 'border-b-2', 'border-kirospirit');
+                link.classList.add('text-gray-600', 'font-medium');
+
+                if (link.getAttribute('data-page') === pageId) {
+                    link.classList.add('text-kirospirit', 'font-bold', 'border-b-2', 'border-kirospirit');
+                    link.classList.remove('text-gray-600', 'font-medium');
+                }
+            });
+        }
+
+        // Luk mobilmenu og naviger, når man klikker på et link
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
             link.addEventListener('click', () => {
                 if (!mobileMenu.classList.contains('hidden')) {
                     toggleMenu();
@@ -438,7 +541,19 @@
             });
         });
 
-        // Simuleret håndtering af kontaktformular
+        // Håndter navigation ved sideindlæsning og browserens tilbage/frem knapper
+        window.addEventListener('load', () => {
+            const initialPage = window.location.hash.substring(1) || 'hjem';
+            showPage(initialPage);
+        });
+
+        window.addEventListener('hashchange', () => {
+            const newPage = window.location.hash.substring(1) || 'hjem';
+            showPage(newPage);
+        });
+
+
+        // Simuleret håndtering af kontaktformular (uændret)
         function handleFormSubmit(event) {
             event.preventDefault();
             const form = event.target;

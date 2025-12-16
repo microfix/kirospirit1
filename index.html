@@ -4,15 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kirospirit | Professionel Kiropraktik & Velvære</title>
+    <!-- Fix til 404 Favicon fejl -->
+    <link rel="icon" href="data:,">
     <!-- Indlæs Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Indlæs Lucide ikoner -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Google Font: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #0d9488; /* Teal 600 - Matcher logoets tone */
+            --primary-color: #0d9488; /* Teal 600 */
             --secondary-color: #2dd4bf; /* Teal 400 */
             --bg-color: #f0fdfa; /* Teal 50 */
         }
@@ -31,38 +33,27 @@
             background-size: cover;
             background-position: center;
         }
-        /* Tilpas ikoner */
-        .lucide { width: 1.5rem; height: 1.5rem; }
         
-        /* Skjul alle sider som standard. De vises via JS. */
-        .page-section {
-            display: none;
-        }
+        /* Skjul alle sider som standard */
+        .page-section { display: none; }
         /* Gør den aktive side synlig */
-        .page-section.active {
-            display: block;
-        }
+        .page-section.active { display: block; }
         
-        /* Specifik styling til at sikre Hero-sektionen tager minimum plads */
-        #hjem-hero {
-            min-height: 650px;
-        }
+        #hjem-hero { min-height: 650px; }
 
         /* Styling for Admin-inputfelter */
         .admin-edit {
-            border: 2px dashed #fcd34d; /* Yellow 300 for visible editing area */
+            border: 2px dashed #fcd34d; 
             padding: 0.5rem;
             margin: 0.25rem 0;
             cursor: pointer;
             transition: border-color 0.2s;
-            color: #1f2937; /* SIKRER SORT TEKST PÅ HVID BAGGRUND */
+            color: #1f2937; 
             background-color: white;
         }
-        .admin-edit:hover {
-             border-color: #f59e0b; /* Yellow 500 */
-        }
+        .admin-edit:hover { border-color: #f59e0b; }
         
-        /* NYT FIX: Standard responsive iframe container */
+        /* FIX: Responsiv video container */
         .aspect-ratio-box {
             position: relative;
             width: 100%;
@@ -70,6 +61,7 @@
             overflow: hidden;
             border-radius: 0.5rem;
             margin-top: 1rem;
+            background-color: #f3f4f6;
         }
         .aspect-ratio-box iframe,
         .aspect-ratio-box video {
@@ -81,541 +73,250 @@
             border: 0;
         }
 
-        /* RETTET: Sikrer at al admin tekst er sort/mørk */
-        #admin-panel {
-            min-height: 50vh;
-            color: #1f2937; 
-        }
-        /* NY FIX: Tilsidesætter den forrige regel for at bevare grøn farve i header knappen */
-        #admin-auth-button,
-        #admin-auth-button i {
-            color: var(--primary-color) !important;
-        }
-        #admin-panel button {
-             color: #1f2937; 
-        }
-        #admin-panel .text-red-600 { /* Bevarer rød for advarsler */
-            color: #dc2626;
-        }
+        /* Admin Panel Styling */
+        #admin-panel { min-height: 50vh; color: #1f2937; }
+        
+        /* Gør admin knappen GRØN */
+        #admin-auth-button { color: var(--primary-color) !important; }
+        
+        #admin-panel button { color: #1f2937; }
+        /* Sørg for "Gem" knapper er hvide i teksten */
+        #admin-panel button.text-white { color: white !important; }
+        #admin-panel button.bg-red-500 { color: white !important; }
 
-        /* Tvinger inputfelter og textarea i modaler til at have sort tekst */
-        #news-modal input,
-        #news-modal textarea,
-        #edit-modal input,
-        #edit-modal textarea {
+        /* Tving inputfelter i modaler til sort tekst */
+        #news-modal input, #news-modal textarea,
+        #edit-modal input, #edit-modal textarea,
+        #login-modal input {
             color: #1f2937 !important; 
             background-color: white !important; 
+            border: 1px solid #d1d5db;
         }
     </style>
 </head>
 <body>
 
-    <!-- Fast Navigationsbar -->
+    <!-- Navigation -->
     <header class="sticky top-0 z-50 bg-white shadow-md bg-opacity-95 backdrop-blur-sm">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
-            
-            <!-- Logo Billede -->
             <a href="#hjem" onclick="showPage('hjem')" class="flex items-center cursor-pointer">
                 <img src="https://i.imgur.com/2Jih3hS.png" alt="Kirospirit Logo" class="h-10 sm:h-14 w-auto">
             </a>
             
             <div class="flex items-center space-x-4">
-                <!-- Desktop Navigation -->
                 <div class="hidden md:flex space-x-8 items-center">
-                    <a href="#hjem" onclick="showPage('hjem')" data-page="hjem" class="nav-link text-gray-600 hover:text-kirospirit transition duration-300 font-medium text-sm uppercase tracking-wider">Hjem</a>
-                    <a href="#birgit" onclick="showPage('birgit')" data-page="birgit" class="nav-link text-gray-600 hover:text-kirospirit transition duration-300 font-medium text-sm uppercase tracking-wider">Mød Birgit</a> 
-                    <a href="#behandlinger" onclick="showPage('behandlinger')" data-page="behandlinger" class="nav-link text-gray-600 hover:text-kirospirit transition duration-300 font-medium text-sm uppercase tracking-wider">Behandlinger</a>
-                    <a href="#kontakt" onclick="showPage('kontakt')" data-page="kontakt" class="nav-link text-gray-600 hover:text-kirospirit transition duration-300 font-medium text-sm uppercase tracking-wider">Kontakt</a>
+                    <a href="#hjem" onclick="showPage('hjem')" data-page="hjem" class="nav-link text-gray-600 hover:text-kirospirit transition font-medium text-sm uppercase">Hjem</a>
+                    <a href="#birgit" onclick="showPage('birgit')" data-page="birgit" class="nav-link text-gray-600 hover:text-kirospirit transition font-medium text-sm uppercase">Mød Birgit</a> 
+                    <a href="#behandlinger" onclick="showPage('behandlinger')" data-page="behandlinger" class="nav-link text-gray-600 hover:text-kirospirit transition font-medium text-sm uppercase">Behandlinger</a>
+                    <a href="#kontakt" onclick="showPage('kontakt')" data-page="kontakt" class="nav-link text-gray-600 hover:text-kirospirit transition font-medium text-sm uppercase">Kontakt</a>
                 </div>
-
-                <!-- CTA Button (Desktop) -->
                 <div class="hidden md:block">
-                    <a href="#kontakt" onclick="showPage('kontakt')" class="bg-kirospirit text-white px-6 py-2.5 rounded-full font-semibold shadow-md hover-kirospirit transition duration-300 text-sm uppercase tracking-wide">Book Tid Online</a>
+                    <a href="#kontakt" onclick="showPage('kontakt')" class="bg-kirospirit text-white px-6 py-2.5 rounded-full font-semibold shadow-md hover-kirospirit transition text-sm uppercase">Book Tid Online</a>
                 </div>
             </div>
 
-            <!-- Mobil Menu Knap & Admin Login -->
             <div class="flex items-center space-x-4">
-                 <!-- Admin Login / Logout Knap -->
-                <!-- I Canvas-miljøet åbner/lukker denne knap Admin Dashboard direkte, da autentificering er deaktiveret -->
-                <button id="admin-auth-button" class="text-kirospirit p-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-kirospirit" onclick="handleAdminAuth()">
+                <button id="admin-auth-button" class="p-2 rounded-md hover:bg-gray-100 focus:outline-none" onclick="handleAdminAuth()" title="Admin Login">
                     <i data-lucide="shield" class="w-5 h-5"></i>
                 </button>
-
-                <button id="menu-button" class="md:hidden text-gray-600 p-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-kirospirit">
+                <button id="menu-button" class="md:hidden text-gray-600 p-2 rounded-md hover:bg-gray-100 focus:outline-none">
                     <i data-lucide="menu"></i>
                 </button>
             </div>
         </nav>
         
-        <!-- Mobil Menu (Skjult som standard) -->
+        <!-- Mobil Menu -->
         <div id="mobile-menu" class="hidden md:hidden absolute w-full bg-white shadow-xl py-4 border-t border-gray-100">
-            <a href="#hjem" onclick="showPage('hjem'); toggleMenu();" class="block px-6 py-3 text-gray-700 font-medium hover:bg-bg-color hover:text-kirospirit transition">Hjem</a>
-            <a href="#birgit" onclick="showPage('birgit'); toggleMenu();" class="block px-6 py-3 text-gray-700 font-medium hover:bg-bg-color hover:text-kirospirit transition">Mød Birgit</a> 
-            <a href="#behandlinger" onclick="showPage('behandlinger'); toggleMenu();" class="block px-6 py-3 text-gray-700 font-medium hover:bg-bg-color hover:text-kirospirit transition">Behandlinger</a>
-            <a href="#kontakt" onclick="showPage('kontakt'); toggleMenu();" class="block px-6 py-3 text-gray-700 font-medium hover:bg-bg-color hover:text-kirospirit transition">Kontakt</a>
-            <div class="px-6 pt-4">
-                 <a href="#kontakt" onclick="showPage('kontakt'); toggleMenu();" class="block text-center w-full bg-kirospirit text-white px-4 py-3 rounded-full font-semibold hover-kirospirit shadow-md transition">Book Tid Online</a>
-            </div>
+            <a href="#hjem" onclick="showPage('hjem'); toggleMenu();" class="block px-6 py-3 text-gray-700 font-medium hover:bg-bg-color hover:text-kirospirit">Hjem</a>
+            <a href="#birgit" onclick="showPage('birgit'); toggleMenu();" class="block px-6 py-3 text-gray-700 font-medium hover:bg-bg-color hover:text-kirospirit">Mød Birgit</a> 
+            <a href="#behandlinger" onclick="showPage('behandlinger'); toggleMenu();" class="block px-6 py-3 text-gray-700 font-medium hover:bg-bg-color hover:text-kirospirit">Behandlinger</a>
+            <a href="#kontakt" onclick="showPage('kontakt'); toggleMenu();" class="block px-6 py-3 text-gray-700 font-medium hover:bg-bg-color hover:text-kirospirit">Kontakt</a>
         </div>
     </header>
     
     <main id="main-content">
         
-        <!-- === Admin Panel Sektion (Synlig KUN ved login) === -->
-        <section id="admin-panel" class="page-section py-16 bg-yellow-50 border-b-4 border-yellow-400">
+        <!-- === Admin Panel === -->
+        <section id="admin-panel" class="page-section py-16 bg-yellow-50 border-b-4 border-yellow-400" style="display: none;">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 class="text-3xl font-extrabold text-gray-900 mb-6 flex items-center">
-                    <i data-lucide="settings-2" class="w-7 h-7 mr-3 text-yellow-600"></i>
-                    Admin Dashboard
+                    <i data-lucide="settings-2" class="w-7 h-7 mr-3 text-yellow-600"></i> Admin Dashboard
                 </h2>
-                <!-- Viser fast e-mail, da login er omgået i Canvas -->
-                <div id="admin-status" class="mb-6 p-3 rounded-lg bg-yellow-100 text-yellow-800 text-sm font-medium">Du er logget ind som <span id="admin-email" class="font-bold">nicolaihlarsen@gmail.com (Canvas Admin)</span></div>
+                <div id="admin-status" class="mb-6 p-3 rounded-lg bg-yellow-100 text-yellow-800 text-sm font-medium">Logget ind som <span id="admin-email" class="font-bold"></span></div>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    
-                    <!-- 1. Indholdsredigering -->
+                    <!-- Tekster -->
                     <div class="bg-white p-6 rounded-xl shadow-lg lg:col-span-2">
-                        <h3 class="text-xl font-bold mb-4 border-b pb-2 text-kirospirit">Rediger Website Tekster & Layout</h3>
-                        <p class="mb-4 text-sm text-gray-600">Klik på teksten herunder for at redigere den. Ændringer træder i kraft straks.</p>
-                        
-                        <!-- Hero Redigering -->
+                        <h3 class="text-xl font-bold mb-4 border-b pb-2 text-kirospirit">Rediger Tekster</h3>
                         <div class="mb-6 border p-4 rounded-lg bg-gray-50">
-                            <label class="block text-sm font-semibold mb-2">Hero Overskrift (H1)</label>
-                            <div id="edit-hero_h1" class="admin-edit" data-key="hero_h1" data-type="text">Henter indhold...</div>
-                            
-                            <label class="block text-sm font-semibold mb-2 mt-4">Hero Underoverskrift (P)</label>
-                            <div id="edit-hero_p" class="admin-edit" data-key="hero_p" data-type="text">Henter indhold...</div>
-
-                            <label class="block text-sm font-semibold mb-2 mt-4">Nyheds Overskrift (H2)</label>
-                            <div id="edit-news_h2" class="admin-edit" data-key="news_h2" data-type="text">Henter indhold...</div>
+                            <label class="block text-sm font-semibold mb-2">Hero Overskrift</label><div id="edit-hero_h1" class="admin-edit" data-key="hero_h1" data-type="text">Henter...</div>
+                            <label class="block text-sm font-semibold mb-2 mt-4">Hero Tekst</label><div id="edit-hero_p" class="admin-edit" data-key="hero_p" data-type="text">Henter...</div>
+                            <label class="block text-sm font-semibold mb-2 mt-4">Nyheds Overskrift</label><div id="edit-news_h2" class="admin-edit" data-key="news_h2" data-type="text">Henter...</div>
                         </div>
-
-                        <!-- Birgit Citat Redigering -->
                          <div class="mb-6 border p-4 rounded-lg bg-gray-50">
-                            <label class="block text-sm font-semibold mb-2">Birgit Citat (Lang)</label>
-                            <div id="edit-birgit_quote" class="admin-edit" data-key="birgit_quote" data-type="textarea">Henter indhold...</div>
+                            <label class="block text-sm font-semibold mb-2">Birgit Citat</label><div id="edit-birgit_quote" class="admin-edit" data-key="birgit_quote" data-type="textarea">Henter...</div>
                         </div>
                     </div>
 
-                    <!-- 2. Nyheds- og Medieopdateringer -->
+                    <!-- Nyheder -->
                     <div class="bg-white p-6 rounded-xl shadow-lg">
-                        <h3 class="text-xl font-bold mb-4 border-b pb-2 text-kirospirit">Nyheder & Sociale Medier</h3>
-                        <p class="mb-4 text-sm text-gray-600">Opret opslag, tilbud eller del Instagram/Facebook links.</p>
-
-                        <!-- NYT: Layout Kontrol -->
+                        <h3 class="text-xl font-bold mb-4 border-b pb-2 text-kirospirit">Nyheder</h3>
                         <div class="mb-6">
-                            <label for="layout-control" class="block text-sm font-semibold mb-2">Vis Opslag som:</label>
-                            <select id="layout-control" onchange="updateNewsLayout(this.value)" class="w-full p-2 border border-gray-300 rounded-lg bg-gray-50 focus:ring-kirospirit focus:border-kirospirit text-gray-900">
-                                <option value="1">1 Kolonne (Fuld bredde)</option>
-                                <option value="2">2 Kolonner</option>
-                                <option value="3">3 Kolonner</option>
+                            <label class="block text-sm font-semibold mb-2">Visning:</label>
+                            <select id="layout-control" onchange="updateNewsLayout(this.value)" class="w-full p-2 border border-gray-300 rounded-lg">
+                                <option value="1">1 Kolonne (Stor)</option><option value="2">2 Kolonner</option><option value="3">3 Kolonner</option>
                             </select>
                             <p id="layout-status" class="mt-2 text-xs text-green-600"></p>
                         </div>
-                        
-                        <!-- OPRET KNAP -->
-                        <button onclick="openNewsModal()" class="w-full bg-secondary-color text-gray-900 px-4 py-3 rounded-full font-bold hover:bg-kirospirit hover:text-white transition flex items-center justify-center">
+                        <button onclick="openNewsModal()" class="w-full bg-secondary-color text-white px-4 py-3 rounded-full font-bold hover:bg-kirospirit transition flex items-center justify-center">
                             <i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i> Opret Nyt Opslag
                         </button>
-                        
                         <div class="mt-6">
-                            <h4 class="font-bold mb-3 text-gray-700">Eksisterende Opslag:</h4>
-                            <ul id="news-list" class="space-y-3">
-                                <li class="text-gray-500 italic">Henter opslag...</li>
-                            </ul>
+                            <h4 class="font-bold mb-3 text-gray-700">Oprettede Opslag:</h4>
+                            <ul id="news-list" class="space-y-3"><li class="text-gray-500 italic">Henter opslag...</li></ul>
                         </div>
                     </div>
                     
-                    <!-- 3. Kontakt Styring -->
+                    <!-- Kontakt -->
                     <div class="bg-white p-6 rounded-xl shadow-lg lg:col-span-3">
-                        <h3 class="text-xl font-bold mb-4 border-b pb-2 text-kirospirit">Kontakt & Sociale Medier</h3>
-                         <p class="mb-4 text-sm text-gray-600">Rediger telefonnummer, e-mails og links.</p>
-
+                        <h3 class="text-xl font-bold mb-4 border-b pb-2 text-kirospirit">Kontaktinformationer</h3>
                          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-semibold mb-2">Besked Modtager E-mail (Backend)</label>
-                                <div id="edit-contact_recipient" class="admin-edit" data-key="contact_recipient" data-type="text">Henter...</div>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold mb-2">Klinik Hoved-E-mail (Visuel)</label>
-                                <div id="edit-contact_email" class="admin-edit" data-key="contact_email" data-type="text">Henter...</div>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                            <div>
-                                <label class="block text-sm font-semibold mb-2">Telefonnummer</label>
-                                <div id="edit-contact_phone" class="admin-edit" data-key="contact_phone" data-type="text">Henter...</div>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-semibold mb-2">Facebook Link</label>
-                                <div id="edit-social_facebook" class="admin-edit" data-key="social_facebook" data-type="text">Henter...</div>
-                            </div>
-                        </div>
-
-                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                             <div>
-                                <label class="block text-sm font-semibold mb-2">Instagram Link</label>
-                                <div id="edit-social_instagram" class="admin-edit" data-key="social_instagram" data-type="text">Henter...</div>
-                            </div>
+                            <div><label class="block text-sm font-semibold mb-2">Formular Modtager E-mail</label><div id="edit-contact_recipient" class="admin-edit" data-key="contact_recipient" data-type="text">Henter...</div></div>
+                            <div><label class="block text-sm font-semibold mb-2">Visnings E-mail</label><div id="edit-contact_email" class="admin-edit" data-key="contact_email" data-type="text">Henter...</div></div>
+                            <div><label class="block text-sm font-semibold mb-2">Telefon</label><div id="edit-contact_phone" class="admin-edit" data-key="contact_phone" data-type="text">Henter...</div></div>
+                            <div><label class="block text-sm font-semibold mb-2">Facebook Link</label><div id="edit-social_facebook" class="admin-edit" data-key="social_facebook" data-type="text">Henter...</div></div>
+                             <div><label class="block text-sm font-semibold mb-2">Instagram Link</label><div id="edit-social_instagram" class="admin-edit" data-key="social_instagram" data-type="text">Henter...</div></div>
                         </div>
                     </div>
                     
-                    <!-- 4. Admin Styring -->
-                    <div class="bg-red-50 p-6 rounded-xl shadow-lg border border-red-200 lg:col-span-3" id="admin-management-section">
-                        <h3 class="text-xl font-bold mb-4 border-b pb-2 text-red-600">Administratorstyring (Super Admin)</h3>
-                        <p class="mb-4 text-sm text-gray-700">Her kan du tilføje eller fjerne e-mails, der har adgang til dette panel.</p>
-                        <ul id="admin-list" class="space-y-2 mb-4 bg-white p-4 rounded-lg border">
-                            <li class="text-gray-500 italic">Henter admins...</li>
-                        </ul>
-                        
+                    <!-- Admins -->
+                    <div class="bg-red-50 p-6 rounded-xl shadow-lg border border-red-200 lg:col-span-3">
+                        <h3 class="text-xl font-bold mb-4 border-b pb-2 text-red-600">Administratorer</h3>
+                        <ul id="admin-list" class="space-y-2 mb-4 bg-white p-4 rounded-lg border"><li class="text-gray-500 italic">Henter...</li></ul>
                         <div class="flex space-x-4">
-                            <input type="email" id="new-admin-email" placeholder="Indtast ny admin e-mail" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 transition duration-150">
-                            <button onclick="addAdmin()" class="bg-red-500 text-white px-6 py-2 rounded-full font-bold hover:bg-red-600 transition">Tilføj Admin</button>
+                            <input type="email" id="new-admin-email" placeholder="Ny admin e-mail" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                            <button onclick="addAdmin()" class="bg-red-500 text-white px-6 py-2 rounded-full font-bold hover:bg-red-600 transition">Tilføj</button>
                         </div>
                         <p id="admin-management-status" class="mt-3 text-sm text-red-700"></p>
                     </div>
-
                 </div>
             </div>
         </section>
 
-
-        <!-- Sektion 1: Hjem - Indeholder Hero og Behandlinger Overblik -->
+        <!-- === FORSIDE === -->
         <section id="hjem" class="page-section active">
-            
-            <!-- Del 1: Hero/Velkomst -->
             <div id="hjem-hero" class="hero-bg text-white flex items-center justify-center min-h-[650px] text-center bg-gray-900 bg-opacity-60 bg-blend-overlay">
                 <div class="p-8 max-w-4xl m-4">
-                    <!-- Indhold hentes fra Firestore -->
-                    <h1 id="hero_h1" class="text-5xl sm:text-7xl font-extrabold mb-6 leading-tight drop-shadow-lg">
-                        <span class="text-secondary-color">Henter</span> indhold...
-                    </h1>
-                    <p id="hero_p" class="text-xl sm:text-3xl font-medium mb-10 opacity-95 drop-shadow-md max-w-2xl mx-auto">
-                        ...vent venligst.
-                    </p>
+                    <h1 id="hero_h1" class="text-5xl sm:text-7xl font-extrabold mb-6 leading-tight drop-shadow-lg"><span class="text-secondary-color">Henter</span> indhold...</h1>
+                    <p id="hero_p" class="text-xl sm:text-3xl font-medium mb-10 opacity-95 drop-shadow-md max-w-2xl mx-auto">...vent venligst.</p>
                     <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-                        <a href="#kontakt" onclick="showPage('kontakt')" class="bg-kirospirit text-white border-2 border-kirospirit px-10 py-4 rounded-full text-lg font-bold uppercase tracking-wider shadow-xl transform hover:scale-105 transition duration-300">
-                            Book Konsultation
-                        </a>
-                        <a href="#behandlinger" onclick="showPage('behandlinger')" class="bg-transparent text-white border-2 border-white px-10 py-4 rounded-full text-lg font-bold uppercase tracking-wider shadow-xl hover:bg-white hover:text-gray-900 transition duration-300">
-                            Se Behandlinger
-                        </a>
+                        <a href="#kontakt" onclick="showPage('kontakt')" class="bg-kirospirit text-white border-2 border-kirospirit px-10 py-4 rounded-full text-lg font-bold uppercase tracking-wider shadow-xl transform hover:scale-105 transition duration-300">Book Konsultation</a>
+                        <a href="#behandlinger" onclick="showPage('behandlinger')" class="bg-transparent text-white border-2 border-white px-10 py-4 rounded-full text-lg font-bold uppercase tracking-wider shadow-xl hover:bg-white hover:text-gray-900 transition duration-300">Se Behandlinger</a>
                     </div>
                 </div>
             </div>
             
-            <!-- Nyheder Sektion -->
              <div id="news-section" class="py-16 bg-bg-color">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="text-center mb-12">
                          <h2 class="text-base text-kirospirit font-bold tracking-wide uppercase">Seneste</h2>
-                        <p id="news_h2" class="mt-2 text-4xl font-extrabold text-gray-900 sm:text-5xl">
-                            Opdateringer & Tilbud
-                        </p>
+                        <p id="news_h2" class="mt-2 text-4xl font-extrabold text-gray-900 sm:text-5xl">Opdateringer & Tilbud</p>
                     </div>
-                    <!-- VIGTIGT: news-display opdateres dynamisk af JS for at inkludere grid-klasser -->
                     <div id="news-display" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                          <p class="text-gray-500 italic md:col-span-3 text-center">Henter nyheder...</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Del 2: Behandlinger Overblik (Uændret, statisk) -->
+            <!-- Preview -->
             <div id="behandlinger-overblik" class="py-20 bg-gray-50">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="text-center mb-16">
-                        <h2 class="text-base text-kirospirit font-bold tracking-wide uppercase">Vores Fokusområder</h2>
-                        <p class="mt-2 text-4xl font-extrabold text-gray-900 sm:text-5xl">
-                            Specialiserede Behandlinger
-                        </p>
-                    </div>
-
+                     <div class="text-center mb-16"><h2 class="text-base text-kirospirit font-bold tracking-wide uppercase">Vores Fokusområder</h2><p class="mt-2 text-4xl font-extrabold text-gray-900 sm:text-5xl">Specialiserede Behandlinger</p></div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                        
-                        <!-- Behandling 1: Kiropraktik -->
                         <div class="bg-white rounded-2xl shadow-md p-8 flex flex-col items-center text-center border-t-4 border-kirospirit hover:shadow-xl transition duration-300">
-                             <div class="bg-bg-color p-3 rounded-full mb-4">
-                                <i data-lucide="bone" class="w-8 h-8 text-kirospirit"></i>
-                            </div>
-                            <h3 class="text-xl font-bold text-gray-900 mb-2">Årsagsorienteret Kiropraktik</h3>
-                            <p class="text-gray-600 text-sm">Fokus på nervesystemet og kroppens evne til selvhelbredelse.</p>
+                             <div class="bg-bg-color p-3 rounded-full mb-4"><i data-lucide="bone" class="w-8 h-8 text-kirospirit"></i></div><h3 class="text-xl font-bold text-gray-900 mb-2">Kiropraktik</h3><p class="text-gray-600 text-sm">Fokus på nervesystemet og kroppens evne til selvhelbredelse.</p>
                         </div>
-
-                        <!-- Behandling 2: Nålebehandling / Dry Needling -->
                         <div class="bg-white rounded-2xl shadow-md p-8 flex flex-col items-center text-center border-t-4 border-secondary-color hover:shadow-xl transition duration-300">
-                            <div class="bg-bg-color p-3 rounded-full mb-4">
-                                <i data-lucide="needle" class="w-8 h-8 text-secondary-color"></i>
-                            </div>
-                            <h3 class="text-xl font-bold text-gray-900 mb-2">Dry Needling / Nålebehandling</h3>
-                            <p class="text-gray-600 text-sm">Målrettet frigørelse af triggerpunkter for dybdegående smertelindring.</p>
+                            <div class="bg-bg-color p-3 rounded-full mb-4"><i data-lucide="needle" class="w-8 h-8 text-secondary-color"></i></div><h3 class="text-xl font-bold text-gray-900 mb-2">Nålebehandling</h3><p class="text-gray-600 text-sm">Målrettet frigørelse af triggerpunkter.</p>
                         </div>
-                        
-                        <!-- Behandling 3: Hovedpine & Migræne -->
-                        <div class="bg-white rounded-2xl shadow-md p-8 flex flex-col items-center text-center border-t-4 border-kirospirit hover:shadow-xl transition duration-300">
-                            <div class="bg-bg-color p-3 rounded-full mb-4">
-                                <i data-lucide="brain-circuit" class="w-8 h-8 text-kirospirit"></i>
-                            </div>
-                            <h3 class="text-xl font-bold text-gray-900 mb-2">Hovedpine & Migræne</h3>
-                            <p class="text-gray-600 text-sm">Neurologisk fokus på nakke og ryg som kilde til hovedpine.</p>
+                         <div class="bg-white rounded-2xl shadow-md p-8 flex flex-col items-center text-center border-t-4 border-kirospirit hover:shadow-xl transition duration-300">
+                            <div class="bg-bg-color p-3 rounded-full mb-4"><i data-lucide="brain-circuit" class="w-8 h-8 text-kirospirit"></i></div><h3 class="text-xl font-bold text-gray-900 mb-2">Hovedpine</h3><p class="text-gray-600 text-sm">Neurologisk fokus på nakke og ryg.</p>
                         </div>
-                        
-                        <!-- CTA for at se alle detaljer -->
-                        <div class="lg:col-span-3 text-center pt-8">
-                            <a href="#behandlinger" onclick="showPage('behandlinger')" class="inline-flex items-center px-8 py-3 rounded-full font-bold text-lg shadow-md bg-white border-2 border-kirospirit text-kirospirit hover:bg-kirospirit hover:text-white transition duration-300">
-                                Se Alle 6 Behandlinger i Detaljer
-                                <i data-lucide="arrow-right" class="ml-2 w-5 h-5"></i>
-                            </a>
-                        </div>
-
+                         <div class="lg:col-span-3 text-center pt-8"><a href="#behandlinger" onclick="showPage('behandlinger')" class="inline-flex items-center px-8 py-3 rounded-full font-bold text-lg shadow-md bg-white border-2 border-kirospirit text-kirospirit hover:bg-kirospirit hover:text-white transition duration-300">Se Alle Behandlinger <i data-lucide="arrow-right" class="ml-2 w-5 h-5"></i></a></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Sektion 2: Mød Birgit (Om Os) -->
+        <!-- === BIRGIT === -->
         <section id="birgit" class="page-section py-24 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="lg:text-center mb-16">
-                    <h2 class="text-base text-kirospirit font-bold tracking-wide uppercase">Om Kirospirit</h2>
-                    <p class="mt-2 text-4xl leading-10 font-extrabold tracking-tight text-gray-900 sm:text-5xl">
-                        Mød Kiropraktor Birgit
-                    </p>
-                </div>
-
+                <div class="lg:text-center mb-16"><h2 class="text-base text-kirospirit font-bold tracking-wide uppercase">Om Kirospirit</h2><p class="mt-2 text-4xl leading-10 font-extrabold tracking-tight text-gray-900 sm:text-5xl">Mød Kiropraktor Birgit</p></div>
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-center">
-                    <!-- Billede af Birgit -->
-                    <div class="lg:col-span-1 flex justify-center lg:justify-start">
-                        <img src="https://kirospirit.dk/wp-content/uploads/2025/09/portraetfoto-1-1-2048x2048.jpg" alt="" class="rounded-3xl shadow-2xl w-full max-w-sm lg:max-w-none transform hover:scale-[1.02] transition duration-500 ease-in-out">
-                    </div>
-
-                    <!-- Tekst om Birgit -->
+                    <div class="lg:col-span-1 flex justify-center lg:justify-start"><img src="https://kirospirit.dk/wp-content/uploads/2025/09/portraetfoto-1-1-2048x2048.jpg" alt="Birgit" class="rounded-3xl shadow-2xl w-full max-w-sm lg:max-w-none transform hover:scale-[1.02] transition duration-500 ease-in-out"></div>
                     <div class="lg:col-span-2 space-y-6 text-lg text-gray-700">
-                        <h3 class="text-3xl font-bold text-gray-900">En Helhedsorienteret Tilgang til Sundhed</h3>
-                        
-                        <!-- Indhold hentes fra Firestore -->
-                        <p id="birgit_quote" class="font-semibold text-kirospirit border-l-4 border-secondary-color pl-4 italic">
-                            Henter citat...
-                        </p>
-                        
-                        <!-- Disse tekster er statiske for nu for at holde fokus på de vigtigste redigeringer -->
-                        <p>
-                            Birgit er uddannet kiropraktor og har specialiseret sig i at finde de **dybereliggende årsager** til smerte og ubalance. Gennem årene har hun udviklet en unik tilgang, der integrerer nervesystemet, de biomekaniske problematikker og det spirituelle aspekt.
-                        </p>
-                        
-                        <p>
-                            Hendes mission er at **behandle hele mennesket**, ikke kun symptomet. Hun skaber varige, positive forandringer i dit liv, ved at hjælpe dig med at forstå og lytte til din krops signaler.
-                        </p>
-
-                        <div class="pt-4 flex flex-wrap gap-4">
-                            <span class="inline-flex items-center rounded-full bg-bg-color px-3 py-1 text-sm font-medium text-kirospirit ring-1 ring-inset ring-kirospirit/20">
-                                <i data-lucide="graduation-cap" class="w-4 h-4 mr-2"></i> Uddannet Kiropraktor
-                            </span>
-                            <span class="inline-flex items-center rounded-full bg-bg-color px-3 py-1 text-sm font-medium text-kirospirit ring-1 ring-inset ring-kirospirit/20">
-                                <i data-lucide="microscope" class="w-4 h-4 mr-2"></i> Årsagsorienteret Fokus
-                            </span>
-                            <span class="inline-flex items-center rounded-full bg-bg-color px-3 py-1 text-sm font-medium text-kirospirit ring-1 ring-inset ring-kirospirit/20">
-                                <i data-lucide="hand-heart" class="w-4 h-4 mr-2"></i> 15+ Års Erfaring
-                            </span>
-                        </div>
+                        <h3 class="text-3xl font-bold text-gray-900">En Helhedsorienteret Tilgang</h3>
+                        <p id="birgit_quote" class="font-semibold text-kirospirit border-l-4 border-secondary-color pl-4 italic">Henter citat...</p>
+                        <p>Birgit er uddannet kiropraktor og har specialiseret sig i at finde de dybereliggende årsager.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Sektion 3: Behandlinger (Uændret, statisk) -->
+        <!-- === BEHANDLINGER === -->
         <section id="behandlinger" class="page-section py-24 bg-gray-50">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-16">
-                    <h2 class="text-base text-kirospirit font-bold tracking-wide uppercase">Dybdegående Overblik</h2>
-                    <p class="mt-2 text-4xl font-extrabold text-gray-900 sm:text-5xl">
-                        Vores Specialiserede Tilbud
-                    </p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Behandling 1: Kiropraktik -->
+             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                 <div class="text-center mb-16"><h2 class="text-base text-kirospirit font-bold tracking-wide uppercase">Detaljeret Overblik</h2><p class="mt-2 text-4xl font-extrabold text-gray-900 sm:text-5xl">Alle Behandlinger</p></div>
+                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Kort 1 -->
                     <div class="bg-white rounded-2xl shadow-md p-8 hover:shadow-xl transition duration-300 flex flex-col h-full border-t-4 border-kirospirit">
-                        <div class="flex items-center mb-6">
-                            <div class="bg-bg-color p-3 rounded-lg">
-                                <i data-lucide="bone" class="w-8 h-8 text-kirospirit"></i>
-                            </div>
-                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Årsagsorienteret Kiropraktik</h3>
-                        </div>
-                        <p class="text-gray-600 flex-grow leading-relaxed">
-                            Vores primære fokus er at justere rygsøjlen blidt for at fjerne interferens i nervesystemet. Dette giver kroppen mulighed for at helbrede sig selv indefra. Vi ser på din holdning, dit nervesystems funktion og de underliggende stressorer.
-                        </p>
+                        <div class="flex items-center mb-6"><div class="bg-bg-color p-3 rounded-lg"><i data-lucide="bone" class="w-8 h-8 text-kirospirit"></i></div><h3 class="text-2xl font-bold text-gray-900 ml-4">Kiropraktik</h3></div>
+                        <p class="text-gray-600 flex-grow">Justering af rygsøjlen for at fjerne interferens i nervesystemet.</p>
                     </div>
-
-                    <!-- Behandling 2: Nålebehandling / Dry Needling -->
+                     <!-- Kort 2 -->
                     <div class="bg-white rounded-2xl shadow-md p-8 hover:shadow-xl transition duration-300 flex flex-col h-full border-t-4 border-secondary-color">
-                        <div class="flex items-center mb-6">
-                            <div class="bg-bg-color p-3 rounded-lg">
-                                <i data-lucide="needle" class="w-8 h-8 text-secondary-color"></i>
-                            </div>
-                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Dry Needling / Nålebehandling</h3>
-                        </div>
-                        <p class="text-gray-600 flex-grow leading-relaxed">
-                            Effektiv behandling af muskelsmerter og spændinger ved hjælp af tynde nåle. Dette målretter triggerpunkter og frigør dybdegående spændinger i muskler og bindevæv. Bruges ofte i kombination med kiropraktik.
-                        </p>
+                        <div class="flex items-center mb-6"><div class="bg-bg-color p-3 rounded-lg"><i data-lucide="needle" class="w-8 h-8 text-secondary-color"></i></div><h3 class="text-2xl font-bold text-gray-900 ml-4">Nålebehandling</h3></div>
+                        <p class="text-gray-600 flex-grow">Effektiv behandling af triggerpunkter med tynde nåle.</p>
                     </div>
-                    
-                    <!-- Behandling 3: Hovedpine & Migræne -->
-                    <div class="bg-white rounded-2xl shadow-md p-8 hover:shadow-xl transition duration-300 flex flex-col h-full border-t-4 border-kirospirit">
-                        <div class="flex items-center mb-6">
-                            <div class="bg-bg-color p-3 rounded-lg">
-                                <i data-lucide="brain-circuit" class="w-8 h-8 text-kirospirit"></i>
-                            </div>
-                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Nervesystemet og Hovedpine</h3>
-                        </div>
-                        <p class="text-gray-600 flex-grow leading-relaxed">
-                            Vi adresserer de neurologiske stressorer og dysfunktioner i nakken, der ofte er den sande kilde til migræne, spændingshovedpine og svimmelhed. Målet er at reducere frekvens og intensitet.
-                        </p>
-                    </div>
-                     <!-- Behandling 4: Graviditet -->
-                     <div class="bg-white rounded-2xl shadow-md p-8 hover:shadow-xl transition duration-300 flex flex-col h-full border-t-4 border-secondary-color">
-                        <div class="flex items-center mb-6">
-                            <div class="bg-bg-color p-3 rounded-lg">
-                                <i data-lucide="baby" class="w-8 h-8 text-secondary-color"></i>
-                            </div>
-                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Behandling under Graviditet</h3>
-                        </div>
-                        <p class="text-gray-600 flex-grow leading-relaxed">
-                            Skånsom og sikker kiropraktik til at lindre bækkensmerter, lændegener og forberede kroppen optimalt til fødslen, hvilket støtter både mor og barn. Vi hjælper med at opretholde bækkenbalance.
-                        </p>
-                    </div>
-
-                    <!-- Behandling 5: Spædbørn -->
-                    <div class="bg-white rounded-2xl shadow-md p-8 hover:shadow-xl transition duration-300 flex flex-col h-full border-t-4 border-kirospirit">
-                        <div class="flex items-center mb-6">
-                            <div class="bg-bg-color p-3 rounded-lg">
-                                <i data-lucide="smile-plus" class="w-8 h-8 text-kirospirit"></i>
-                            </div>
-                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Blid Børnekiropraktik</h3>
-                        </div>
-                        <p class="text-gray-600 flex-grow leading-relaxed">
-                            Målrettet og meget blid justering af spædbørn og børn for at adressere problemer relateret til fødselstraumer, kolik, søvnforstyrrelser og motorisk udvikling. Meget skånsomme teknikker.
-                        </p>
-                    </div>
-                    
-                     <!-- Behandling 6: Opfølgende Behandling (CTA kort) -->
-                     <div class="bg-kirospirit rounded-2xl shadow-md p-8 hover:shadow-xl transition duration-300 flex flex-col h-full items-center justify-center text-center text-white">
-                        <i data-lucide="hand-heart" class="w-16 h-16 mb-6 opacity-90"></i>
-                        <h3 class="text-3xl font-bold mb-4">Holistisk Velvære</h3>
-                        <p class="mb-8 text-lg opacity-95">
-                            Vi tilbyder også vejledning i livsstil og øvelser for at sikre varig balance i krop, sind og spirit.
-                        </p>
-                         <a href="#kontakt" onclick="showPage('kontakt')" class="bg-white text-kirospirit px-8 py-3 rounded-full font-bold uppercase tracking-wider hover:bg-secondary-color hover:text-white transition">Start Din Rejse</a>
-                    </div>
-
+                     <!-- Kort 3 (Flere kan tilføjes her) -->
                 </div>
             </div>
         </section>
 
-        <!-- Sektion 4: Kontakt (Contact Form) - OPDATERET TIL FORMULAR -->
+        <!-- === KONTAKT === -->
         <section id="kontakt" class="page-section py-24 bg-white relative overflow-hidden">
-            <!-- Dekorativ baggrundscirkel -->
             <div class="absolute top-0 left-0 transform -translate-x-1/2 -translate-y-1/2 rounded-full bg-bg-color w-[800px] h-[800px] opacity-50 -z-10"></div>
-            
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-16">
-                    <h2 class="text-base text-kirospirit font-bold tracking-wide uppercase">Kontakt & Booking</h2>
-                    <p class="mt-2 text-4xl font-extrabold text-gray-900 sm:text-5xl">
-                        Send Os En Besked
-                    </p>
-                </div>
-
+                <div class="text-center mb-16"><h2 class="text-base text-kirospirit font-bold tracking-wide uppercase">Kontakt & Booking</h2><p class="mt-2 text-4xl font-extrabold text-gray-900 sm:text-5xl">Send Os En Besked</p></div>
                 <div class="flex flex-wrap -mx-4 lg:flex-nowrap gap-8">
-                    
-                    <!-- Kontakt Formular -->
                     <div class="w-full lg:w-7/12 px-4 lg:mb-0">
                         <div class="bg-white p-8 sm:p-12 rounded-2xl shadow-2xl border border-gray-100">
                              <h3 class="text-2xl font-bold text-gray-900 mb-8">Uforpligtende Forespørgsel</h3>
                             <form id="contact-form" onsubmit="handleFormSubmit(event)">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                                    <!-- Navn -->
-                                    <div>
-                                        <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">Fulde Navn *</label>
-                                        <input type="text" id="name" name="name" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-kirospirit focus:border-transparent transition duration-150 bg-gray-50" placeholder="Dit navn">
-                                    </div>
-                                    <!-- E-mail -->
-                                    <div>
-                                        <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">Din E-mail *</label>
-                                        <input type="email" id="email" name="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-kirospirit focus:border-transparent transition duration-150 bg-gray-50" placeholder="din@email.dk">
-                                    </div>
+                                    <div><label class="block text-sm font-semibold text-gray-700 mb-2">Navn</label><input type="text" name="name" required class="w-full px-4 py-3 border border-gray-300 rounded-lg"></div>
+                                    <div><label class="block text-sm font-semibold text-gray-700 mb-2">E-mail</label><input type="email" name="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg"></div>
                                 </div>
-                                
-                                <!-- Emne -->
-                                <div class="mb-6">
-                                    <label for="subject" class="block text-sm font-semibold text-gray-700 mb-2">Emne</label>
-                                    <input type="text" id="subject" name="subject" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-kirospirit focus:border-transparent transition duration-150 bg-gray-50" placeholder="Spørgsmål til behandling / Forespørgsel">
-                                </div>
-
-                                <!-- Besked -->
-                                <div class="mb-8">
-                                    <label for="message" class="block text-sm font-semibold text-gray-700 mb-2">Din Besked *</label>
-                                    <textarea id="message" name="message" rows="5" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-kirospirit focus:border-transparent transition duration-150 bg-gray-50" placeholder="Skriv din besked her..."></textarea>
-                                </div>
-                                
-                                <!-- Status/Bekræftelsesboks -->
-                                <div id="form-status-message" class="hidden p-4 mb-6 rounded-lg text-sm font-medium flex items-center" role="alert"></div>
-
-                                <!-- Send Knap -->
-                                <button type="submit" id="contact-submit-btn" class="w-full bg-kirospirit text-white px-6 py-4 rounded-full font-bold text-lg shadow-md hover:bg-secondary-color transition duration-300 focus:outline-none focus:ring-4 focus:ring-kirospirit focus:ring-opacity-50 flex items-center justify-center uppercase tracking-wider">
-                                    <span>Send Forespørgsel</span>
-                                    <i data-lucide="send" class="ml-2 w-5 h-5"></i>
-                                </button>
+                                <div class="mb-6"><label class="block text-sm font-semibold text-gray-700 mb-2">Emne</label><input type="text" name="subject" required class="w-full px-4 py-3 border border-gray-300 rounded-lg"></div>
+                                <div class="mb-8"><label class="block text-sm font-semibold text-gray-700 mb-2">Besked</label><textarea name="message" rows="5" required class="w-full px-4 py-3 border border-gray-300 rounded-lg"></textarea></div>
+                                <div id="form-status-message" class="hidden p-4 mb-6 rounded-lg text-sm font-medium"></div>
+                                <button type="submit" id="contact-submit-btn" class="w-full bg-kirospirit text-white px-6 py-4 rounded-full font-bold shadow-md hover:bg-secondary-color transition">Send Besked</button>
                             </form>
                         </div>
                     </div>
-
-                    <!-- Kontaktdetaljer og Info (NU DYNAMISK) -->
                     <div class="w-full lg:w-5/12 px-4 flex flex-col gap-8">
-                        
-                         <!-- Info boks -->
                          <div class="bg-gradient-to-br from-kirospirit to-secondary-color p-8 rounded-2xl shadow-xl text-white">
-                            <h3 class="text-2xl font-bold mb-6">Klinik Information</h3>
+                            <h3 class="text-2xl font-bold mb-6">Kontaktinfo</h3>
                             <ul class="space-y-6">
-                                <li class="flex items-start">
-                                    <i data-lucide="map-pin" class="mr-4 mt-1 flex-shrink-0"></i>
-                                    <span>
-                                        <strong>Kirospirit</strong><br>
-                                        Adresse Kommer Her 123<br>
-                                        1000 København K
-                                    </span>
-                                </li>
-                                <li class="flex items-center">
-                                    <i data-lucide="phone" class="mr-4 flex-shrink-0"></i>
-                                    <span>
-                                        Telefon: <a id="contact_phone_link" href="tel:+4512345678" class="hover:underline font-semibold">Henter tlf...</a>
-                                    </span>
-                                </li>
-                                <li class="flex items-center">
-                                    <i data-lucide="mail" class="mr-4 flex-shrink-0"></i>
-                                    <span>
-                                        E-mail: <a id="contact_email_link" href="mailto:kontakt@kirospirit.dk" class="hover:underline font-semibold">Henter mail...</a>
-                                    </span>
-                                </li>
-                                 <li class="flex items-start">
-                                    <i data-lucide="clock" class="mr-4 mt-1 flex-shrink-0"></i>
-                                    <span>
-                                        <strong>Åbningstider:</strong><br>
-                                        Man - Tor: 08:00 - 17:00<br>
-                                        Fre: 08:00 - 15:00<br>
-                                        Weekend: Lukket
-                                    </span>
-                                </li>
+                                <li class="flex items-center"><i data-lucide="phone" class="mr-4"></i><span><a id="contact_phone_link" href="#" class="hover:underline font-semibold">Henter...</a></span></li>
+                                <li class="flex items-center"><i data-lucide="mail" class="mr-4"></i><span><a id="contact_email_link" href="#" class="hover:underline font-semibold">Henter...</a></span></li>
                             </ul>
                         </div>
-
-                        <!-- SoMe boks -->
-                        <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 flex flex-col justify-center items-center text-center flex-grow">
-                            <h4 class="text-xl font-bold text-gray-900 mb-6">Følg med på sociale medier</h4>
-                            <p class="text-gray-600 mb-6">Få tips til sundhed, øvelser og nyheder fra klinikken.</p>
-                            <div class="flex space-x-6">
-                                <a id="social_facebook_link" href="#" target="_blank" aria-label="Facebook" class="bg-bg-color p-3 rounded-full text-kirospirit hover:bg-kirospirit hover:text-white transition duration-300 transform hover:-translate-y-1 shadow-sm"><i data-lucide="facebook" class="w-6 h-6"></i></a>
-                                <a id="social_instagram_link" href="#" target="_blank" aria-label="Instagram" class="bg-bg-color p-3 rounded-full text-kirospirit hover:bg-kirospirit hover:text-white transition duration-300 transform hover:-translate-y-1 shadow-sm"><i data-lucide="instagram" class="w-6 h-6"></i></a>
+                         <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 text-center">
+                            <h4 class="text-xl font-bold text-gray-900 mb-6">Sociale Medier</h4>
+                            <div class="flex justify-center space-x-6">
+                                <a id="social_facebook_link" href="#" target="_blank" class="bg-bg-color p-3 rounded-full text-kirospirit hover:bg-kirospirit hover:text-white transition"><i data-lucide="facebook" class="w-6 h-6"></i></a>
+                                <a id="social_instagram_link" href="#" target="_blank" class="bg-bg-color p-3 rounded-full text-kirospirit hover:bg-kirospirit hover:text-white transition"><i data-lucide="instagram" class="w-6 h-6"></i></a>
                             </div>
                         </div>
                     </div>
@@ -625,144 +326,97 @@
 
     </main>
     
-    <!-- Footer (Uændret, statisk) -->
     <footer class="bg-gray-900 text-gray-300 py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
-            <!-- Kolonne 1: Logo & Intro -->
-            <div class="flex flex-col items-center md:items-start">
-                <!-- Footer Logo - Lys udgave via CSS filtere -->
-                <img src="https://i.imgur.com/2Jih3hS.png" alt="Kirospirit Logo" class="h-12 w-auto mb-4 brightness-0 invert">
-                <p class="text-sm leading-relaxed max-w-xs mx-auto md:mx-0">
-                    Professionel kiropraktik og sundhedsfremmende behandlinger med fokus på det hele menneske.
-                </p>
-            </div>
-            
-             <!-- Kolonne 2: Hurtige Links -->
-             <div class="flex flex-col items-center md:items-start">
-                <h4 class="text-white text-lg font-bold mb-4 uppercase tracking-wider">Navigation</h4>
-                <ul class="space-y-2">
-                    <li><a href="#hjem" onclick="showPage('hjem')" class="hover:text-secondary-color transition">Forside</a></li>
-                    <li><a href="#birgit" onclick="showPage('birgit')" class="hover:text-secondary-color transition">Mød Birgit</a></li> 
-                    <li><a href="#behandlinger" onclick="showPage('behandlinger')" class="hover:text-secondary-color transition">Vores Behandlinger</a></li>
-                    <li><a href="#kontakt" onclick="showPage('kontakt')" class="hover:text-secondary-color transition">Kontakt & Booking</a></li>
-                </ul>
-            </div>
-
-             <!-- Kolonne 3: Juridisk -->
-             <div class="flex flex-col items-center md:items-start">
-                <h4 class="text-white text-lg font-bold mb-4 uppercase tracking-wider">Information</h4>
-                 <ul class="space-y-2">
-                    <li><a href="#" class="hover:text-secondary-color transition">Privatlivspolitik</a></li>
-                    <li><a href="#" class="hover:text-secondary-color transition">Cookiepolitik</a></li>
-                    <li><a href="#" class="hover:text-secondary-color transition">Handelsbetingelser</a></li>
-                </ul>
-            </div>
-        </div>
-        
-        <!-- Copyright Bar -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mt-12 pt-8 border-t border-gray-800 text-sm text-gray-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+             <img src="https://i.imgur.com/2Jih3hS.png" alt="Kirospirit Logo" class="h-12 w-auto mx-auto mb-4 brightness-0 invert">
             <p>&copy; <span id="year"></span> Kirospirit. Alle rettigheder forbeholdes.</p>
         </div>
     </footer>
     
     
-    <!-- === Modal til Redigering af Indhold (Skjult som standard) === -->
+    <!-- Modaler -->
     <div id="edit-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-[100] hidden">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-xl p-6 m-4">
-            <h3 id="modal-title" class="text-2xl font-bold text-kirospirit mb-4">Rediger Indhold</h3>
-            <textarea id="modal-content-input" rows="5" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-kirospirit transition duration-150"></textarea>
+            <h3 class="text-2xl font-bold text-kirospirit mb-4">Rediger Indhold</h3>
+            <textarea id="modal-content-input" rows="5" class="w-full p-3 border border-gray-300 rounded-lg"></textarea>
             <div class="mt-4 flex justify-end space-x-3">
-                <button onclick="closeModal()" class="px-6 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100 transition">Annuller</button>
-                <button onclick="saveContentUpdate()" id="modal-save-button" class="bg-kirospirit text-white px-6 py-2 rounded-full font-bold hover:bg-kirospirit transition">Gem Ændring</button>
+                <button onclick="closeModal()" class="px-6 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100">Annuller</button>
+                <button onclick="saveContentUpdate()" id="modal-save-button" class="bg-kirospirit text-white px-6 py-2 rounded-full font-bold">Gem</button>
             </div>
-            <p id="modal-status" class="mt-3 text-sm text-red-600"></p>
         </div>
     </div>
     
-    <!-- === Modal til Oprettelse/Redigering af Nyheder (Skjult som standard) === -->
     <div id="news-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-[100] hidden">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-xl p-6 m-4">
-            <h3 id="news-modal-title" class="text-2xl font-bold text-kirospirit mb-4">Opret Nyt Opslag</h3>
+            <h3 class="text-2xl font-bold text-kirospirit mb-4">Opret/Rediger Opslag</h3>
             <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-semibold mb-1">Titel</label>
-                    <input type="text" id="news-title" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="Tilbud i december!">
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold mb-1">Brødtekst (Max 500 tegn)</label>
-                    <textarea id="news-body" rows="4" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="Få 10% rabat på din næste behandling..."></textarea>
-                </div>
-                 <div>
-                    <label class="block text-sm font-semibold mb-1">Medie Embed Code / Link (Facebook iframe, Instagram embed, Youtube URL)</label>
-                    <!-- OPDATERET: Bruger textarea til at understøtte HTML iframe -->
-                    <textarea id="news-media-url" rows="3" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="Indsæt Facebooks <iframe> kode eller en simpel URL her..."></textarea>
-                    <p class="text-xs text-gray-500 mt-1">Bemærk: Ved Facebook/Instagram: indsæt hele Embed Code'en. Ved Youtube/Video URL: indsæt den simple URL for at se et link.</p>
-                </div>
+                <input type="text" id="news-title" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="Titel">
+                <textarea id="news-body" rows="4" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="Tekst"></textarea>
+                <textarea id="news-media-url" rows="3" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="Embed Code eller Link"></textarea>
             </div>
-            <div class="mt-6 flex justify-between items-center">
-                <button onclick="closeNewsModal()" class="px-6 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100 transition">Annuller</button>
+            <div class="mt-6 flex justify-between">
+                <button onclick="closeNewsModal()" class="px-6 py-2 rounded-full border border-gray-300 text-gray-700">Annuller</button>
                 <div class="flex space-x-3">
-                     <button onclick="deleteNewsItem()" id="news-delete-button" class="bg-red-500 text-white px-4 py-2 rounded-full font-bold hover:bg-red-600 transition hidden">Slet</button>
-                    <button onclick="saveNewsItem()" id="news-save-button" class="bg-kirospirit text-white px-6 py-2 rounded-full font-bold hover:kirospirit transition">Gem Opslag</button>
+                     <button onclick="deleteNewsItem()" id="news-delete-button" class="bg-red-500 text-white px-4 py-2 rounded-full font-bold hidden">Slet</button>
+                    <button onclick="saveNewsItem()" id="news-save-button" class="bg-kirospirit text-white px-6 py-2 rounded-full font-bold">Gem</button>
                 </div>
             </div>
-            <p id="news-modal-status" class="mt-3 text-sm text-red-600"></p>
         </div>
     </div>
     
-    <!-- === Login Modal (Deaktiveret) === -->
     <div id="login-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-[100] hidden">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-sm p-8 m-4">
-            <h3 class="text-2xl font-bold text-kirospirit mb-6 text-center">Administrator Login</h3>
-            <p class="text-sm text-gray-700 text-center mb-4">E-mail/Adgangskode er ikke aktiveret i Firebase. Log venligst ind på et rigtigt domæne, eller brug Canvas Admin-mode.</p>
-            <div class="space-y-4 input-group">
-                <input type="email" id="login-email" placeholder="E-mail" required disabled>
-                <input type="password" id="login-password" placeholder="Adgangskode" required disabled>
+            <h3 class="text-2xl font-bold text-kirospirit mb-6 text-center">Admin Login</h3>
+            <div class="space-y-4">
+                <input type="email" id="login-email" placeholder="E-mail" class="w-full p-3 border border-gray-300 rounded-lg">
+                <input type="password" id="login-password" placeholder="Adgangskode" class="w-full p-3 border border-gray-300 rounded-lg">
             </div>
             <div class="mt-6">
-                <button onclick="closeLoginModal()" class="w-full bg-gray-400 text-white px-6 py-3 rounded-full font-bold">Luk</button>
+                <button onclick="authenticateAdmin()" class="w-full bg-kirospirit text-white px-6 py-3 rounded-full font-bold">Log Ind</button>
+                 <button onclick="closeLoginModal()" class="w-full mt-2 bg-gray-200 text-gray-700 px-6 py-2 rounded-full">Annuller</button>
             </div>
+             <p id="login-status-message" class="mt-4 text-center text-sm text-red-600"></p>
         </div>
     </div>
 
-    <!-- === JavaScript & Firebase Logik === -->
+    <!-- Javascript -->
     <script type="module">
-        // --- Firebase Imports ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        // Vi beholder disse for kompatibilitet og når appen flyttes
-        import { getAuth, signInWithCustomToken, signOut, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection, query, orderBy, deleteDoc, updateDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        
-        // Sæt log-niveau for fejlfinding
-        setLogLevel('Debug'); 
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, collection, query, orderBy, deleteDoc, updateDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // --- Globale Firebase Variabler ---
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-kirospirit-app';
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-        
+        // FIREBASE CONFIG - INDSAT FRA DIN BESKED
+        const firebaseConfig = {
+          apiKey: "AIzaSyDTd1htAFr-Q6PJoicKTClvLFNn3oTBykk",
+          authDomain: "kirospirit-web.firebaseapp.com",
+          projectId: "kirospirit-web",
+          storageBucket: "kirospirit-web.firebasestorage.app",
+          messagingSenderId: "504896278904",
+          appId: "1:504896278904:web:46073ab7cce2b357d1b88d",
+          measurementId: "G-K4DEHK0B6D"
+        };
+        const appId = 'default-kirospirit-app';
+
+        // Globals
         let app, db, auth;
         let isAdmin = false;
-        // Simulér logget ind bruger i Canvas for at have et 'currentUser' objekt
-        let currentUser = { email: "nicolaihlarsen@gmail.com (Canvas Admin)" }; 
+        let currentUser = null; 
         let allowedAdmins = [];
-        // Hovedoplysninger
         let contactInfo = {};
-
+        let currentNewsId = null;
         
-        // Firestore stier
+        // Stier
         const CONTENT_DOC_PATH = `artifacts/${appId}/public/data/site_content/main`;
         const ADMINS_DOC_PATH = `artifacts/${appId}/public/data/admins/users`;
         const NEWS_COLLECTION_PATH = `artifacts/${appId}/public/data/news`;
         
-        // --- ADMIN INITIAL CONTENT & SETUP ---
+        // Initial Indhold
         const INITIAL_CONTENT = {
             hero_h1: "Velkommen til Kirospirit",
             hero_p: "Moderne kiropraktik og helhedsorienteret behandling i hjertet af København.",
-            birgit_quote: "Jeg bruger mine 15 års erfaring som kiropraktor og min viden om, at krop, sind og spirit hænger uløseligt sammen. Behandlingen hos mig er en helhedsbehandling, som hjælper dig med at genfinde balancen i dit liv.",
+            birgit_quote: "Jeg bruger mine 15 års erfaring som kiropraktor...",
             news_h2: "Opdateringer & Tilbud", 
-            news_layout_cols: "3", // NY
+            news_layout_cols: "3",
             contact_recipient: "nicolaihlarsen@gmail.com", 
             contact_email: "kontakt@kirospirit.dk", 
             contact_phone: "+45 12 34 56 78", 
@@ -771,737 +425,303 @@
             allowed_emails: ["nicolaihlarsen@gmail.com"] 
         };
 
-        // --- Core Firebase Initialization and Auth ---
         function initFirebase() {
             try {
                 app = initializeApp(firebaseConfig);
                 auth = getAuth(app);
                 db = getFirestore(app);
                 
-                // Sikkerhedstjek for at sikre Canvas-auth er sat.
-                if (!initialAuthToken) {
-                    console.error("ADVARSEL: __initial_auth_token mangler. Siden kan ikke skrive til Firestore.");
-                    signInAnonymously(auth).catch(console.error);
-                } else {
-                    // Hvis token eksisterer, brug det til at opnå godkendt status (ikke anonym).
-                    signInWithCustomToken(auth, initialAuthToken)
-                        .then(() => console.log("Canvas auth successful."))
-                        .catch(console.error);
-                }
+                onAuthStateChanged(auth, (user) => {
+                    currentUser = user;
+                    // Hent altid data (læsning bør være tilladt i Rules)
+                    setupContentListeners();
+                    // Tjek admin
+                    setupAdminAuthListener();
+                });
+            } catch (error) { console.error("Firebase Init Error:", error); }
+        }
 
-                // VIKTIGT FIX: Kald engangsindlæsning for at undgå vedvarende permissions-fejl i onSnapshot
-                setupContentListeners(); 
-                setupAdminAuthListener();
-                
-                // Tving Admin UI til at være aktiv i Canvas, så du kan redigere indhold.
-                isAdmin = true;
-                updateAdminUI(true);
-                
-            } catch (error) {
-                console.error("Firebase Initialization Error:", error);
+        // --- Auth & Admin Logic ---
+        window.handleAdminAuth = () => {
+            if (isAdmin) {
+                signOut(auth).then(() => window.location.reload());
+            } else {
+                document.getElementById('login-modal').classList.remove('hidden');
+                document.getElementById('login-status-message').textContent = '';
             }
-        }
-        
-        // --- Authentication Logic (Simuleret for Canvas) ---
+        };
 
-        function handleAdminAuth() {
-            // I Canvas skifter vi kun Admin Dashboard tilstand.
-            isAdmin = !document.getElementById('admin-panel').classList.contains('active');
-            updateAdminUI(isAdmin);
-        }
-        
-        window.closeLoginModal = function() {
-            document.getElementById('login-modal').classList.add('hidden');
-        }
-        
-        window.authenticateAdmin = function() {
-            document.getElementById('login-modal').classList.remove('hidden');
-        }
+        window.authenticateAdmin = async () => {
+             const email = document.getElementById('login-email').value.trim();
+             const password = document.getElementById('login-password').value.trim();
+             const status = document.getElementById('login-status-message');
+             
+             if(!email || !password) { status.textContent = "Udfyld felter"; return; }
+             status.textContent = "Logger ind...";
 
-        function checkAdminStatus(userEmail) {
-            // Returnerer altid sandt, når vi simulerer admin adgang
-            return true;
-        }
+             try {
+                 await signInWithEmailAndPassword(auth, email, password);
+                 window.closeLoginModal();
+             } catch (e) {
+                 // Auto-create logic for first run
+                 if((e.code === 'auth/user-not-found' || e.code === 'auth/invalid-credential') && email.toLowerCase() === INITIAL_CONTENT.allowed_emails[0]) {
+                     try {
+                         await createUserWithEmailAndPassword(auth, email, password);
+                         // Ensure admin doc exists
+                         const snap = await getDoc(doc(db, ADMINS_DOC_PATH));
+                         if(!snap.exists()) await setDoc(doc(db, ADMINS_DOC_PATH), { allowed_emails: INITIAL_CONTENT.allowed_emails });
+                         window.closeLoginModal();
+                     } catch (createErr) { status.textContent = "Fejl: " + createErr.message; }
+                 } else {
+                     status.textContent = "Fejl: " + e.message;
+                 }
+             }
+        };
 
-        function setupAdminAuthListener() {
-            // RETTET: Brug getDoc til at læse admins én gang for at undgå permissions-fejl.
-            getDoc(doc(db, ADMINS_DOC_PATH)).then(docSnap => {
-                let data = docSnap.exists() ? docSnap.data() : null;
-                
-                if (!data || !data.allowed_emails || data.allowed_emails.length === 0) {
-                    allowedAdmins = INITIAL_CONTENT.allowed_emails;
-                    if (!docSnap.exists()) {
-                         setDoc(doc(db, ADMINS_DOC_PATH), { allowed_emails: allowedAdmins }).catch(console.error);
-                    }
-                } else {
-                    allowedAdmins = data.allowed_emails;
-                }
-                
-                // Opdater Admin List UI
-                if (isAdmin) {
-                    updateAdminListUI();
-                }
-                
-            }).catch(console.error); 
-        }
+        window.closeLoginModal = () => document.getElementById('login-modal').classList.add('hidden');
 
-        function updateAdminUI(loggedInAsAdmin) {
-            const adminPanel = document.getElementById('admin-panel');
-            const adminAuthButton = document.getElementById('admin-auth-button');
-            
-            adminAuthButton.innerHTML = `<i data-lucide="${loggedInAsAdmin ? 'log-out' : 'shield'}" class="w-5 h-5"></i>`;
-            adminAuthButton.title = loggedInAsAdmin ? 'Luk Admin Panel' : 'Åbn Admin Panel';
-            
-            if (loggedInAsAdmin) {
-                adminPanel.classList.add('active'); // Brug classlist til at tvinge synlighed
-                addAdminEditListeners();
+        async function setupAdminAuthListener() {
+            if(!db) return;
+            // Fetch allowed admins list once
+            try {
+                const snap = await getDoc(doc(db, ADMINS_DOC_PATH));
+                if(snap.exists()) allowedAdmins = snap.data().allowed_emails || [];
+                else allowedAdmins = INITIAL_CONTENT.allowed_emails;
+            } catch(e) { console.warn("Kunne ikke hente admin liste (ok hvis guest)", e); }
+
+            if(currentUser && allowedAdmins.includes(currentUser.email.toLowerCase())) {
+                isAdmin = true;
+                document.getElementById('admin-panel').style.display = 'block';
+                document.getElementById('admin-email').textContent = currentUser.email;
+                document.getElementById('admin-auth-button').innerHTML = '<i data-lucide="log-out" class="w-5 h-5"></i>';
+                // Activate edit listeners
+                document.querySelectorAll('.admin-edit').forEach(el => el.addEventListener('click', handleEditClick));
                 updateAdminListUI();
             } else {
-                adminPanel.classList.remove('active');
-                removeAdminEditListeners();
+                isAdmin = false;
+                document.getElementById('admin-panel').style.display = 'none';
+                document.getElementById('admin-auth-button').innerHTML = '<i data-lucide="shield" class="w-5 h-5"></i>';
             }
             lucide.createIcons();
         }
-        
-        function showAdminStatus(message, classes) {
-            const statusBox = document.getElementById('admin-management-status');
-            statusBox.className = `mt-3 p-3 rounded-lg text-sm ${classes}`;
-            statusBox.textContent = message;
-            setTimeout(() => { statusBox.textContent = ''; statusBox.className = 'mt-3 text-sm text-red-700'; }, 5000);
-        }
 
-        // --- Content Management (CRUD) ---
-
-        // 1. Initial Fetch og Listener for Hovedindhold
+        // --- Data Fetching ---
         async function setupContentListeners() {
-            if (!db) return; 
-            
+            if(!db) return;
             const docRef = doc(db, CONTENT_DOC_PATH);
+            let data = INITIAL_CONTENT;
             
-            // Brug getDoc for engangshentning
-            const docSnap = await getDoc(docRef).catch(console.error);
-            
-            let data = {};
-            if (docSnap && docSnap.exists()) {
-                data = docSnap.data();
-            } else {
-                 // Hvis dokumentet ikke findes eller vi ikke kan læse det, opret det og brug initialt indhold
-                 await setDoc(docRef, INITIAL_CONTENT).catch(console.error);
-                 data = INITIAL_CONTENT;
-            }
-            
-            // Gem alle kontaktinfo for brug i kontaktformularen
-            contactInfo = {
-                recipient: data.contact_recipient || INITIAL_CONTENT.contact_recipient,
-                email: data.contact_email || INITIAL_CONTENT.contact_email,
-                phone: data.contact_phone || INITIAL_CONTENT.contact_phone,
-                facebook: data.social_facebook || INITIAL_CONTENT.social_facebook,
-                instagram: data.social_instagram || INITIAL_CONTENT.social_instagram,
-                news_h2: data.news_h2 || INITIAL_CONTENT.news_h2,
-                news_layout_cols: data.news_layout_cols || INITIAL_CONTENT.news_layout_cols, // NYT
-                hero_h1: data.hero_h1 || INITIAL_CONTENT.hero_h1,
-                hero_p: data.hero_p || INITIAL_CONTENT.hero_p,
-                birgit_quote: data.birgit_quote || INITIAL_CONTENT.birgit_quote
-            };
+            try {
+                const snap = await getDoc(docRef);
+                if(snap.exists()) data = snap.data();
+                else await setDoc(docRef, INITIAL_CONTENT).catch(e=>console.warn("Write error (ok if guest)", e));
+            } catch(e) { console.warn("Fetch error", e); }
 
-            // Opdater front-end elementer med fallback
-            document.getElementById('hero_h1').textContent = contactInfo.hero_h1;
-            document.getElementById('hero_p').textContent = contactInfo.hero_p;
-            document.getElementById('birgit_quote').textContent = contactInfo.birgit_quote;
-            document.getElementById('news_h2').textContent = contactInfo.news_h2; 
+            // Store for contact form logic
+            contactInfo = data; 
             
-            // Opdater Kontakt UI
-            document.getElementById('contact_phone_link').textContent = contactInfo.phone;
-            document.getElementById('contact_phone_link').href = `tel:${contactInfo.phone.replace(/\s/g, "")}`;
+            // Populate DOM
+            const setTxt = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = val; };
+            setTxt('hero_h1', data.hero_h1);
+            setTxt('hero_p', data.hero_p);
+            setTxt('birgit_quote', data.birgit_quote);
+            setTxt('news_h2', data.news_h2);
             
-            document.getElementById('contact_email_link').textContent = contactInfo.email;
-            document.getElementById('contact_email_link').href = `mailto:${contactInfo.email}`;
-            
-            document.getElementById('social_facebook_link').href = contactInfo.facebook;
-            document.getElementById('social_instagram_link').href = contactInfo.instagram;
-            
-            // Opdater Admin UI redigeringsfelter
-            if (isAdmin) {
-                document.getElementById('edit-hero_h1').textContent = contactInfo.hero_h1;
-                document.getElementById('edit-hero_p').textContent = contactInfo.hero_p;
-                document.getElementById('edit-birgit_quote').textContent = contactInfo.birgit_quote;
-                document.getElementById('edit-news_h2').textContent = contactInfo.news_h2; 
-                
-                document.getElementById('edit-contact_recipient').textContent = contactInfo.recipient;
-                document.getElementById('edit-contact_email').textContent = contactInfo.email;
-                document.getElementById('edit-contact_phone').textContent = contactInfo.phone;
-                document.getElementById('edit-social_facebook').textContent = contactInfo.facebook;
-                document.getElementById('edit-social_instagram').textContent = contactInfo.instagram;
+            // Links
+            const setHref = (id, link) => { const el = document.getElementById(id); if(el) el.href = link; };
+            setTxt('contact_phone_link', data.contact_phone);
+            setHref('contact_phone_link', `tel:${data.contact_phone?.replace(/\s/g, "")}`);
+            setTxt('contact_email_link', data.contact_email);
+            setHref('contact_email_link', `mailto:${data.contact_email}`);
+            setHref('social_facebook_link', data.social_facebook);
+            setHref('social_instagram_link', data.social_instagram);
 
-                // NYT: Sæt layout controller
-                const layoutControl = document.getElementById('layout-control');
-                if (layoutControl) {
-                    layoutControl.value = contactInfo.news_layout_cols;
-                }
+            // Populate Admin Fields
+            if(isAdmin) {
+                const setVal = (id, val) => { const el = document.getElementById('edit-'+id); if(el) el.textContent = val; };
+                for(const key in data) setVal(key, data[key]);
+                const layout = document.getElementById('layout-control');
+                if(layout) layout.value = data.news_layout_cols || "3";
             }
-            
-            // Læs Nyheder (engangs)
+
+            // Fetch News
             const q = query(collection(db, NEWS_COLLECTION_PATH), orderBy("timestamp", "desc"));
-            const querySnapshot = await getDocs(q).catch(console.error);
-
-            const newsItems = [];
-            if (querySnapshot) {
-                 querySnapshot.forEach((doc) => {
-                    newsItems.push({ id: doc.id, ...doc.data() });
-                });
-            }
-            renderNewsItems(newsItems, contactInfo.news_layout_cols);
-            renderNewsList(newsItems);
-        }
-        
-        // --- NY FUNKTION: Opdaterer Layout Værdien i DB ---
-        window.updateNewsLayout = async function(cols) {
-            if (!isAdmin || !db) return;
-            
-            const status = document.getElementById('layout-status');
-            status.textContent = 'Gemmer layout...';
-            
-            const docRef = doc(db, CONTENT_DOC_PATH);
+            let newsData = [];
             try {
-                await updateDoc(docRef, { news_layout_cols: cols });
-                status.textContent = `Layout gemt! ${cols} kolonner.`;
-                // Opdater indholdet manuelt for at vise de nye kolonner
-                await setupContentListeners(); 
-            } catch (error) {
-                 status.textContent = `Fejl: Kunne ikke gemme layout. ${error.message}`;
-            }
-             setTimeout(() => { status.textContent = ''; }, 3000);
+                const snap = await getDocs(q);
+                snap.forEach(doc => newsData.push({id: doc.id, ...doc.data()}));
+            } catch(e) { console.warn("News fetch error", e); }
+            
+            renderNewsItems(newsData, data.news_layout_cols || "3");
+            renderNewsList(newsData);
         }
         
-        // 2. Redigering af Hovedindhold (Modal)
-        let currentEditKey = null;
+        window.updateNewsLayout = async (cols) => {
+             if(!isAdmin) return;
+             document.getElementById('layout-status').textContent = "Gemmer...";
+             try {
+                 await updateDoc(doc(db, CONTENT_DOC_PATH), { news_layout_cols: cols });
+                 document.getElementById('layout-status').textContent = "Gemt!";
+                 setupContentListeners();
+             } catch(e) { alert("Fejl"); }
+        };
 
-        function addAdminEditListeners() {
-            document.querySelectorAll('.admin-edit').forEach(element => {
-                element.addEventListener('click', handleEditClick);
-            });
-        }
-        
-        function removeAdminEditListeners() {
-             document.querySelectorAll('.admin-edit').forEach(element => {
-                element.removeEventListener('click', handleEditClick);
-            });
-        }
+        // --- News Logic ---
+        function renderNewsItems(items, cols) {
+             const container = document.getElementById('news-display');
+             container.className = `grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-${cols}`;
+             container.innerHTML = '';
+             
+             if(items.length === 0) { container.innerHTML = '<p class="text-gray-500 italic text-center col-span-full">Ingen nyheder.</p>'; return; }
 
-        function handleEditClick(event) {
-            if (!isAdmin) return; 
-            
-            const element = event.currentTarget;
-            currentEditKey = element.getAttribute('data-key');
-            const dataType = element.getAttribute('data-type');
-            const currentValue = element.textContent.trim();
-            
-            const modal = document.getElementById('edit-modal');
-            const input = document.getElementById('modal-content-input');
-            const title = document.getElementById('modal-title');
-            
-            title.textContent = "Rediger: " + currentEditKey.replace('_', ' ').toUpperCase();
-            input.value = currentValue;
-            input.rows = dataType === 'textarea' ? 6 : 3;
-            document.getElementById('modal-status').textContent = '';
-            
-            modal.classList.remove('hidden');
-        }
-
-        function closeModal() {
-            document.getElementById('edit-modal').classList.add('hidden');
-            currentEditKey = null;
-        }
-
-        async function saveContentUpdate() {
-            if (!currentEditKey) return;
-
-            const input = document.getElementById('modal-content-input');
-            const status = document.getElementById('modal-status');
-            const saveBtn = document.getElementById('modal-save-button'); // Hent knap
-            
-            const oldValue = saveBtn.textContent;
-            saveBtn.textContent = 'Gemmer...';
-            saveBtn.disabled = true;
-
-            const docRef = doc(db, CONTENT_DOC_PATH);
-            const updateData = { [currentEditKey]: input.value };
-
-            try {
-                await updateDoc(docRef, updateData);
-                status.textContent = 'Indhold opdateret!';
-                status.classList.remove('text-red-600');
-                status.classList.add('text-green-600');
-                // Efter succesfuld skrivning, genindlæs indholdet manuelt (da vi ikke bruger onSnapshot)
-                await setupContentListeners(); 
-                setTimeout(() => closeModal(), 1000);
-            } catch (error) {
-                console.error("Fejl ved opdatering:", error);
-                status.textContent = 'Fejl: Kunne ikke gemme ændringen.';
-                status.classList.remove('text-green-600');
-                status.classList.add('text-red-600');
-            } finally {
-                saveBtn.textContent = oldValue;
-                saveBtn.disabled = false;
-            }
-        }
-        
-        // 3. Nyheds Opslag (CRUD)
-        let currentNewsId = null;
-
-        function openNewsModal(newsItem = null) {
-            if (!isAdmin) return;
-            
-            const modal = document.getElementById('news-modal');
-            const titleInput = document.getElementById('news-title');
-            const bodyInput = document.getElementById('news-body');
-            const mediaInput = document.getElementById('news-media-url');
-            const modalTitle = document.getElementById('news-modal-title');
-            const deleteBtn = document.getElementById('news-delete-button');
-            
-            document.getElementById('news-modal-status').textContent = '';
-            
-            if (newsItem) {
-                currentNewsId = newsItem.id;
-                modalTitle.textContent = "Rediger Opslag";
-                titleInput.value = newsItem.title;
-                bodyInput.value = newsItem.body;
-                mediaInput.value = newsItem.media_url || '';
-                deleteBtn.style.display = 'block';
-            } else {
-                currentNewsId = null;
-                modalTitle.textContent = "Opret Nyt Opslag";
-                titleInput.value = '';
-                bodyInput.value = '';
-                mediaInput.value = '';
-                deleteBtn.style.display = 'none';
-            }
-            modal.classList.remove('hidden');
-        }
-        
-        function closeNewsModal() {
-            document.getElementById('news-modal').classList.add('hidden');
-            currentNewsId = null;
-        }
-        
-        async function saveNewsItem() {
-            if (!isAdmin) return;
-            
-            const title = document.getElementById('news-title').value.trim();
-            const body = document.getElementById('news-body').value.trim();
-            const mediaUrl = document.getElementById('news-media-url').value.trim();
-            const status = document.getElementById('news-modal-status');
-            const saveBtn = document.getElementById('news-save-button'); 
-            
-            if (!title || !body) {
-                status.textContent = "Titel og brødtekst er påkrævet.";
-                return;
-            }
-            
-            const data = {
-                title: title,
-                body: body,
-                media_url: mediaUrl,
-                timestamp: new Date().toISOString()
-            };
-            
-            const oldValue = saveBtn.textContent; 
-            saveBtn.textContent = 'Gemmer...';
-            saveBtn.disabled = true;
-
-            status.textContent = 'Gemmer...';
-            
-            try {
-                if (currentNewsId) {
-                    await updateDoc(doc(db, NEWS_COLLECTION_PATH, currentNewsId), data);
-                    status.textContent = "Opslag opdateret!";
-                } else {
-                    await setDoc(doc(db, NEWS_COLLECTION_PATH, crypto.randomUUID()), data);
-                    status.textContent = "Opslag oprettet!";
-                }
-                status.classList.remove('text-red-600');
-                status.classList.add('text-green-600');
-                // Efter succesfuld skrivning, genindlæs indholdet manuelt (da vi ikke bruger onSnapshot)
-                await setupContentListeners(); 
-                setTimeout(() => closeNewsModal(), 1000);
-            } catch (error) {
-                console.error("Fejl ved gem opdatering:", error);
-                status.textContent = 'Fejl: Kunne ikke gemme opslaget.';
-                status.classList.remove('text-green-600');
-                status.classList.add('text-red-600');
-            } finally {
-                saveBtn.textContent = oldValue; 
-                saveBtn.disabled = false;
-            }
-        }
-        
-        async function deleteNewsItem() {
-            if (!isAdmin || !currentNewsId) return;
-            
-            // Brug en custom modal/bekræftelse i stedet for window.confirm()
-            if (!confirm('Er du sikker på du vil slette dette opslag?')) return;
-            
-            const status = document.getElementById('news-modal-status');
-            status.textContent = 'Sletter...';
-
-            try {
-                await deleteDoc(doc(db, NEWS_COLLECTION_PATH, currentNewsId));
-                status.textContent = "Opslag slettet!";
-                // Efter sletning, genindlæs indholdet manuelt (da vi ikke bruger onSnapshot)
-                await setupContentListeners(); 
-                closeNewsModal();
-            } catch (error) {
-                console.error("Fejl ved sletning:", error);
-                status.textContent = 'Fejl: Kunne ikke slette opslaget.';
-            }
+             items.forEach(item => {
+                 let mediaHtml = '';
+                 if(item.media_url && item.media_url.trim().startsWith('<iframe')) {
+                     // Aspect Ratio fix
+                     const wMatch = item.media_url.match(/width="(\d+)"/);
+                     const hMatch = item.media_url.match(/height="(\d+)"/);
+                     let ratio = 56.25; // default 16:9
+                     if(wMatch && hMatch && parseInt(wMatch[1]) > 0) {
+                         ratio = (parseInt(hMatch[1]) / parseInt(wMatch[1])) * 100;
+                     }
+                     // Clean iframe
+                     let cleanFrame = item.media_url.replace(/width="\d+"/, '').replace(/height="\d+"/, '');
+                     mediaHtml = `<div class="aspect-ratio-box" style="padding-bottom: ${ratio}%;">${cleanFrame}</div>`;
+                 } else if (item.media_url) {
+                      mediaHtml = `<a href="${item.media_url}" target="_blank" class="block mt-4 text-kirospirit underline">Se Link</a>`;
+                 }
+                 
+                 const date = item.timestamp ? new Date(item.timestamp).toLocaleDateString() : '';
+                 const card = document.createElement('div');
+                 card.className = "bg-white rounded-xl shadow-md p-6 border-t-4 border-secondary-color flex flex-col";
+                 card.innerHTML = `<h4 class="text-xl font-bold mb-2">${item.title}</h4><span class="text-xs text-gray-400 mb-4">${date}</span><p class="text-gray-600 flex-grow whitespace-pre-wrap">${item.body}</p>${mediaHtml}`;
+                 container.appendChild(card);
+             });
         }
         
         function renderNewsList(items) {
              const list = document.getElementById('news-list');
-             if (!list) return; // Sikkerhedstjek
-             
              list.innerHTML = '';
-
-             if (items.length === 0) {
-                 list.innerHTML = '<li class="text-gray-500 italic">Ingen opslag oprettet.</li>';
-                 return;
-             }
-
              items.forEach(item => {
-                 // Formatér dato
-                 const date = item.timestamp ? new Date(item.timestamp).toLocaleDateString('da-DK', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
-                 
                  const li = document.createElement('li');
-                 li.className = 'flex justify-between items-center p-3 bg-white rounded-lg shadow-sm border border-gray-100 cursor-pointer hover:bg-gray-50 transition';
-                 
-                 // Titel + Dato element
+                 li.className = "flex justify-between p-2 bg-gray-50 rounded border";
                  const span = document.createElement('span');
-                 span.className = 'font-medium text-gray-800 truncate';
-                 span.textContent = `${item.title} (${date})`;
-
-                 // Rediger knap
-                 const editBtn = document.createElement('button');
-                 editBtn.className = 'text-kirospirit hover:text-secondary-color ml-4 flex-shrink-0';
-                 editBtn.innerHTML = '<i data-lucide="edit" class="w-4 h-4"></i>';
-                 
-                 // Direkte onclick handler med hele item-objektet
-                 editBtn.onclick = () => openNewsModal(item);
-
-                 li.appendChild(span);
-                 li.appendChild(editBtn);
+                 span.textContent = `${item.title} (${new Date(item.timestamp).toLocaleDateString()})`;
+                 const btn = document.createElement('button');
+                 btn.innerHTML = '<i data-lucide="edit" class="w-4 h-4"></i>';
+                 // FIX: Send objekt direkte, ingen stringify fejl
+                 btn.onclick = () => window.openNewsModal(item);
+                 li.append(span, btn);
                  list.appendChild(li);
              });
              lucide.createIcons();
         }
         
-        function renderNewsItems(items, layoutCols) {
-            const display = document.getElementById('news-display');
-            if (!display) return; // Sikkerhedstjek
-            
-            display.innerHTML = '';
-            
-            if (items.length === 0) {
-                display.innerHTML = '<p class="text-gray-500 italic md:col-span-3 text-center">Ingen nyheder fundet.</p>';
-                return;
-            }
-            
-            // NYT: Opdater grid-klasser baseret på layoutCols (1, 2 eller 3)
-            // Vi tvinger mobile til 1 kolonne, tablet til 2, og desktop til valgte cols
-            display.className = `grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-${layoutCols}`;
-
-            items.forEach(item => {
-                let mediaHtml = '';
-                
-                if (item.media_url) {
-                    const mediaContent = item.media_url.trim();
-
-                    if (mediaContent.startsWith('<iframe')) {
-                        // FIX: Henter width og height fra embed-koden for at beregne aspect ratio
-                        const widthMatch = mediaContent.match(/width="(\d+)"/);
-                        const heightMatch = mediaContent.match(/height="(\d+)"/);
-                        
-                        let aspectRatioPadding = '56.25%'; // Default 16:9
-
-                        if (widthMatch && heightMatch) {
-                            const width = parseInt(widthMatch[1]);
-                            const height = parseInt(heightMatch[1]);
-                            if (width > 0) {
-                                aspectRatioPadding = ((height / width) * 100).toFixed(2) + '%';
-                            }
-                        }
-
-                        // BRUGER NU aspect-ratio-box med den beregnede padding-bottom
-                        mediaHtml = `<div class="aspect-ratio-box" style="padding-bottom: ${aspectRatioPadding};">
-                                        ${mediaContent}
-                                     </div>`;
-                        
-                        // Ekstra JS for at sikre at iframe's width/height attributter fjernes, så den bruger CSS (100% bredde)
-                        const tempDiv = document.createElement('div');
-                        tempDiv.innerHTML = mediaHtml;
-                        const iframe = tempDiv.querySelector('iframe');
-                        
-                        if (iframe) {
-                            iframe.removeAttribute('width');
-                            iframe.removeAttribute('height');
-                            // Iframe vil nu automatisk følge 100% width/height af aspect-ratio-box
-                        }
-                        mediaHtml = tempDiv.innerHTML;
-
-                    } else if (mediaContent.startsWith('http')) {
-                        // Hvis det kun er en simpel URL (f.eks. til YouTube eller et Instagram opslag uden embed code)
-                         const url = mediaContent;
-                         const isInstagram = url.includes('instagram.com');
-                         const isFacebook = url.includes('facebook.com');
-
-                        mediaHtml = `
-                            <a href="${url}" target="_blank" class="block w-full bg-gray-100 text-center py-4 rounded-lg mt-4 text-kirospirit font-semibold hover:bg-gray-200 transition">
-                                <i data-lucide="${isInstagram ? 'instagram' : (isFacebook ? 'facebook' : 'link')}" class="w-6 h-6 inline-block mr-2"></i> 
-                                Se ${isInstagram ? 'Instagram Opslag' : (isFacebook ? 'Facebook Opslag' : 'Medie Link')}
-                            </a>
-                        `;
-                    }
-                }
-
-                const date = item.timestamp ? new Date(item.timestamp).toLocaleDateString('da-DK', { day: 'numeric', month: 'short' }) : 'Ukendt Dato';
-
-                const card = document.createElement('div');
-                // NYT: Tilføjelse af col-span-X hvis layout er 1 (fuld bredde)
-                let colSpanClass = '';
-                if (layoutCols === '1') {
-                    colSpanClass = 'lg:col-span-3 md:col-span-2'; 
-                }
-
-                card.className = `bg-white rounded-xl shadow-md p-6 border-t-4 border-secondary-color hover:shadow-xl transition duration-300 flex flex-col h-full ${colSpanClass}`;
-                card.innerHTML = `
-                    <div class="flex justify-between items-center mb-4">
-                        <h4 class="text-xl font-bold text-gray-900">${item.title}</h4>
-                        <span class="text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded-full">${date}</span>
-                    </div>
-                    <p class="text-gray-600 flex-grow leading-relaxed">${item.body}</p>
-                    ${mediaHtml}
-                `;
-                display.appendChild(card);
-            });
-            lucide.createIcons();
+        // --- Shared Editing Logic ---
+        let currentEditKey = null;
+        function handleEditClick(e) {
+            currentEditKey = e.currentTarget.getAttribute('data-key');
+            const val = e.currentTarget.textContent;
+            document.getElementById('modal-content-input').value = val;
+            document.getElementById('edit-modal').classList.remove('hidden');
         }
 
-        // --- Admin User Management ---
+        window.saveContentUpdate = async () => {
+            if(!currentEditKey) return;
+            const newVal = document.getElementById('modal-content-input').value;
+            try {
+                 await updateDoc(doc(db, CONTENT_DOC_PATH), { [currentEditKey]: newVal });
+                 document.getElementById('edit-modal').classList.add('hidden');
+                 setupContentListeners(); // Refresh
+            } catch(e) { alert("Fejl: " + e.message); }
+        };
+        window.closeModal = () => document.getElementById('edit-modal').classList.add('hidden');
 
+        // News CRUD
+        window.openNewsModal = (item) => {
+             const modal = document.getElementById('news-modal');
+             const title = document.getElementById('news-title');
+             const body = document.getElementById('news-body');
+             const media = document.getElementById('news-media-url');
+             const delBtn = document.getElementById('news-delete-button');
+             
+             if(item && item.id) { // Ensure it's an edit
+                 currentNewsId = item.id;
+                 title.value = item.title;
+                 body.value = item.body;
+                 media.value = item.media_url || '';
+                 delBtn.classList.remove('hidden');
+             } else {
+                 currentNewsId = null;
+                 title.value = ''; body.value = ''; media.value = '';
+                 delBtn.classList.add('hidden');
+             }
+             modal.classList.remove('hidden');
+        };
+        
+        window.closeNewsModal = () => document.getElementById('news-modal').classList.add('hidden');
+        
+        window.saveNewsItem = async () => {
+             const title = document.getElementById('news-title').value;
+             const body = document.getElementById('news-body').value;
+             const media = document.getElementById('news-media-url').value;
+             if(!title || !body) return alert("Udfyld titel og tekst");
+             
+             const data = { title, body, media_url: media, timestamp: new Date().toISOString() };
+             try {
+                 if(currentNewsId) await updateDoc(doc(db, NEWS_COLLECTION_PATH, currentNewsId), data);
+                 else await setDoc(doc(db, NEWS_COLLECTION_PATH, crypto.randomUUID()), data);
+                 window.closeNewsModal();
+                 setupContentListeners();
+             } catch(e) { alert(e.message); }
+        };
+        
+        window.deleteNewsItem = async () => {
+            if(!currentNewsId || !confirm("Slet?")) return;
+            await deleteDoc(doc(db, NEWS_COLLECTION_PATH, currentNewsId));
+            window.closeNewsModal();
+            setupContentListeners();
+        };
+        
+        // --- Admins ---
+        window.addAdmin = async () => {
+            const email = document.getElementById('new-admin-email').value.trim().toLowerCase();
+            if(!email.includes('@')) return;
+            const newList = [...allowedAdmins, email];
+            await updateDoc(doc(db, ADMINS_DOC_PATH), { allowed_emails: newList });
+            document.getElementById('new-admin-email').value = '';
+            setupAdminAuthListener();
+        };
+
+        window.removeAdmin = async (email) => {
+            if(allowedAdmins.length <= 1) return alert("Kan ikke slette sidste admin");
+            const newList = allowedAdmins.filter(e => e !== email);
+            await updateDoc(doc(db, ADMINS_DOC_PATH), { allowed_emails: newList });
+            setupAdminAuthListener();
+        };
+        
         function updateAdminListUI() {
             const list = document.getElementById('admin-list');
-            if (!list) return; // Sikkerhedstjek
-            
             list.innerHTML = '';
-
-            if (allowedAdmins.length === 0) {
-                list.innerHTML = '<li class="text-red-500 italic">Ingen administratorer fundet! Siden er usikker.</li>';
-                return;
-            }
-            
             allowedAdmins.forEach(email => {
                 const li = document.createElement('li');
-                li.className = 'flex justify-between items-center p-2 bg-white rounded-lg border-b border-gray-100';
-                li.innerHTML = `
-                    <span class="font-mono text-gray-800">${email}</span>
-                    <button onclick="removeAdmin('${email}')" class="text-red-500 hover:text-red-700 ml-4 flex-shrink-0" ${allowedAdmins.length === 1 ? 'disabled' : ''}>
-                        <i data-lucide="user-x" class="w-4 h-4"></i>
-                    </button>
-                `;
+                li.className = "flex justify-between p-2 border-b";
+                li.innerHTML = `<span>${email}</span><button onclick="removeAdmin('${email}')" class="text-red-500"><i data-lucide="user-x" class="w-4 h-4"></i></button>`;
                 list.appendChild(li);
             });
             lucide.createIcons();
         }
 
-        async function updateAdminListInDB(newAdminList) {
-            
-            if (!db) return; // Kan ikke gemme uden db
-            
-            try {
-                await updateDoc(doc(db, ADMINS_DOC_PATH), { allowed_emails: newAdminList });
-                showAdminStatus("Admin liste opdateret!", "bg-green-100 text-green-800");
-                await setupAdminAuthListener(); // Genindlæs admins
-            } catch (error) {
-                console.error("Fejl ved admin opdatering:", error);
-                showAdminStatus("Fejl: Kunne ikke opdatere admin listen i databasen.", "bg-red-100 text-red-800");
-            }
-        }
-
-        window.addAdmin = function() {
-            if (!isAdmin) return;
-            
-            const emailInput = document.getElementById('new-admin-email');
-            const newEmail = emailInput.value.trim().toLowerCase();
-
-            if (!newEmail || !newEmail.includes('@')) {
-                showAdminStatus("Ugyldig e-mail adresse.", "bg-red-100 text-red-800");
-                return;
-            }
-            if (allowedAdmins.includes(newEmail)) {
-                showAdminStatus("Denne e-mail er allerede admin.", "bg-yellow-100 text-yellow-800");
-                return;
-            }
-
-            const newAdminList = [...allowedAdmins, newEmail];
-            updateAdminListInDB(newAdminList);
-            emailInput.value = '';
-        }
-
-        window.removeAdmin = function(emailToRemove) {
-            if (!isAdmin) return;
-            
-            if (allowedAdmins.length <= 1) {
-                showAdminStatus("Kan ikke slette den sidste administrator.", "bg-red-100 text-red-800");
-                return;
-            }
-            
-            const newAdminList = allowedAdmins.filter(email => email !== emailToRemove);
-            updateAdminListInDB(newAdminList);
-        }
-        
-        // --- Kontaktformular Håndtering (NY) ---
-        async function handleFormSubmit(event) {
-            event.preventDefault();
-            
-            const form = event.target;
-            const statusMessage = document.getElementById('form-status-message');
-            const submitBtn = document.getElementById('contact-submit-btn');
-
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
-            
-            const recipientEmail = contactInfo.recipient;
-            
-            // Simuler afsendelse - I en rigtig app skal dette erstattes med en backend-kald (Cloud Function/PHP)
-            
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span>Sender...</span><i data-lucide="loader-2" class="ml-2 w-5 h-5 animate-spin"></i>';
-            lucide.createIcons();
-
-            console.log("SIMULERING: Kontaktformular sendt til: " + recipientEmail);
-            console.log("Data:", data);
-            
-            setTimeout(() => {
-                // Simuler succes
-                const success = true; 
-                statusMessage.classList.remove('hidden', 'bg-red-50', 'text-red-800', 'border-red-200');
-                
-                if (success) {
-                    statusMessage.classList.add('bg-green-50', 'text-green-800', 'border-green-200');
-                    statusMessage.innerHTML = '<i data-lucide="check-circle-2" class="w-5 h-5 mr-3 text-green-600"></i> Tak! Din besked er modtaget. Vi svarer dig hurtigst muligt.';
-                    form.reset();
-                } else {
-                    statusMessage.classList.add('bg-red-50', 'text-red-800', 'border-red-200');
-                    statusMessage.innerHTML = '<i data-lucide="alert-circle" class="w-5 h-5 mr-3 text-red-600"></i> Fejl: Kunne ikke sende beskeden. Prøv venligst igen.';
-                }
-
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<span>Send Forespørgsel</span><i data-lucide="send" class="ml-2 w-5 h-5"></i>';
-                lucide.createIcons();
-                
-                setTimeout(() => {
-                    statusMessage.classList.add('hidden');
-                }, 8000);
-            }, 1500); // 1.5 sekunders forsinkelse
-        }
-
-
-        // --- Eksponering af globale funktioner til HTML (nødvendigt for onclick) ---
-        window.handleAdminAuth = handleAdminAuth;
-        window.showPage = showPage;
-        window.toggleMenu = toggleMenu;
-        window.closeModal = closeModal;
-        window.saveContentUpdate = saveContentUpdate;
-        window.openNewsModal = openNewsModal;
-        window.closeNewsModal = closeNewsModal;
-        window.saveNewsItem = saveNewsItem;
-        window.deleteNewsItem = deleteNewsItem;
-        window.handleFormSubmit = handleFormSubmit; // NY
-        window.updateNewsLayout = updateNewsLayout;
-        
-        // --- Eksisterende HTML Logik (Opdateret til window.funktion) ---
-
-        // Initialiser Lucide ikoner
-        lucide.createIcons();
-
-        // Dynamisk årstal i footer
-        document.getElementById('year').textContent = new Date().getFullYear();
-
-        // Logik for mobilmenu
-        const menuButton = document.getElementById('menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        function toggleMenu() {
-            mobileMenu.classList.toggle('hidden');
-            const icon = menuButton.querySelector('i');
-            if (mobileMenu.classList.contains('hidden')) {
-                icon.setAttribute('data-lucide', 'menu');
-            } else {
-                icon.setAttribute('data-lucide', 'x');
-            }
-            lucide.createIcons();
-        }
-        menuButton.addEventListener('click', toggleMenu);
-
-        // --- Multi-page navigationslogik ---
-
-        // Funktion til at vise den valgte side og opdatere navigationen
-        function showPage(pageId) {
-            // Sørg for at funktionen ikke kører, før DOM-elementer er klar
-            const activeSection = document.getElementById(pageId);
-            if (!activeSection) return; 
-
-            // Skjul alle sektioner
-            document.querySelectorAll('.page-section').forEach(section => {
-                section.classList.remove('active');
-            });
-
-            // Vis den valgte sektion
-            activeSection.classList.add('active');
-                
-            // Opdater URL hash
-            history.pushState(null, '', '#' + pageId);
-            window.scrollTo(0, 0); // Rul til toppen af siden ved skift
-            
-            // Opdater navigationens visuelle tilstand
-            updateNavActiveState(pageId);
-        }
-
-        // Funktion til at opdatere den aktive knap i navigationen
-        function updateNavActiveState(pageId) {
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('text-kirospirit', 'font-bold', 'border-b-2', 'border-kirospirit');
-                link.classList.add('text-gray-600', 'font-medium');
-
-                if (link.getAttribute('data-page') === pageId) {
-                    link.classList.add('text-kirospirit', 'font-bold', 'border-b-2', 'border-kirospirit');
-                    link.classList.remove('text-gray-600', 'font-medium');
-                }
-            });
-        }
-
-        // Luk mobilmenu og naviger, når man klikker på et link
-        document.querySelectorAll('#mobile-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-                if (!mobileMenu.classList.contains('hidden')) {
-                    toggleMenu();
-                }
-            });
-        });
-
-        // Håndter navigation ved sideindlæsning og browserens tilbage/frem knapper
-        window.addEventListener('load', () => {
-            const initialPage = window.location.hash.substring(1) || 'hjem';
-            showPage(initialPage);
-        });
-
-        window.addEventListener('hashchange', () => {
-            const newPage = window.location.hash.substring(1) || 'hjem';
-            showPage(newPage);
-        });
-        
-        // --- Start Firebase ---
+        // Init & Nav
         initFirebase();
+        window.showPage = (pageId) => {
+             document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+             document.getElementById(pageId)?.classList.add('active');
+             window.scrollTo(0,0);
+        };
+        window.onload = () => window.showPage(window.location.hash.substring(1) || 'hjem');
+        lucide.createIcons();
+        window.handleFormSubmit = (e) => { e.preventDefault(); alert("Tak! (Dette er en demo - brug EmailJS for at sende rigtigt)."); };
     </script>
-
 </body>
 </html>

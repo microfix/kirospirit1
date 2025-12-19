@@ -3,7 +3,7 @@ import { doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebase
 import { app, auth, db, PORTS, INITIAL_CONTENT } from './config.js';
 import * as Auth from './auth.js';
 import * as DB from './db.js';
-import * as UI from './ui.js?v=fixed6';
+import * as UI from './ui.js?v=fixed12';
 
 // Global Stater (can be kept here or moved to respective modules)
 let currentNewsId = null;
@@ -139,16 +139,11 @@ function attachWindowFunctions() {
     };
 
     // Helper for star rating UI
-    const updateStarRatingUI = (container, value) => {
-        container.dataset.value = value;
-        const stars = container.querySelectorAll('i');
-        stars.forEach((star, idx) => {
-            if (idx < value) {
-                star.classList.add('active');
-            } else {
-                star.classList.remove('active');
-            }
-        });
+    window.setReviewStars = (value) => {
+        const container = document.getElementById('star-rating-container');
+        if (container) {
+            container.dataset.value = value;
+        }
     };
 
     // Reviews
@@ -158,26 +153,17 @@ function attachWindowFunctions() {
 
         const starContainer = document.getElementById('star-rating-container');
         const starValue = item ? item.stars : 5;
-        updateStarRatingUI(starContainer, starValue);
+        window.setReviewStars(starValue);
 
-        // Add listeners to stars if not already added
-        if (!starContainer.dataset.listenersAdded) {
-            const stars = starContainer.querySelectorAll('i');
-            stars.forEach((star, idx) => {
-                const val = idx + 1;
-                star.onclick = () => updateStarRatingUI(starContainer, val);
-                star.onmouseover = () => {
-                    stars.forEach((s, sIdx) => {
-                        if (sIdx < val) s.classList.add('hover');
-                        else s.classList.remove('hover');
-                    });
-                };
-                star.onmouseout = () => {
-                    stars.forEach(s => s.classList.remove('hover'));
-                };
-            });
-            starContainer.dataset.listenersAdded = "true";
-        }
+        // Ensure robust click listener
+        starContainer.onclick = (e) => {
+            const span = e.target.closest('span[data-index]');
+            if (span) {
+                const val = span.dataset.index;
+                window.setReviewStars(val);
+                console.log("Clicked star:", val);
+            }
+        };
 
         document.getElementById('review-duration').value = item ? (item.duration || 5) : '5';
         document.getElementById('review-text').value = item ? item.text : '';

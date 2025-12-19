@@ -91,60 +91,79 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-                    <!-- 1. Behandlinger Styring (NY) -->
+                    <!-- 1. Behandlinger Styring -->
                     <div class="bg-white p-8 rounded-2xl shadow-lg border-t-4 border-kirospirit lg:col-span-2">
                         <div class="flex justify-between items-center mb-6">
-                            <h3 class="text-2xl font-bold text-gray-800">Behandlinger</h3>
+                            <h3 class="text-2xl font-bold text-gray-800 flex items-center">
+                                <i data-lucide="activity" class="w-6 h-6 mr-2 text-kirospirit"></i> Behandlinger
+                            </h3>
                             <button onclick="window.openTreatmentModal()"
-                                class="bg-kirospirit text-white px-5 py-2 rounded-full font-bold hover:opacity-90 flex items-center">
+                                class="bg-kirospirit text-white px-5 py-2 rounded-full font-bold hover:opacity-90 flex items-center shadow-md">
                                 <i data-lucide="plus" class="w-5 h-5 mr-2"></i> Tilføj Behandling
                             </button>
                         </div>
-                        <p class="text-gray-500 mb-4 text-sm">De første 3 behandlinger vises på forsiden. Alle vises på
-                            behandlingssiden.</p>
-                        <div id="admin-treatments-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            <p class="text-gray-400 italic">Henter behandlinger...</p>
+                        <p
+                            class="text-gray-500 mb-6 text-sm bg-gray-50 p-3 rounded-lg border-l-4 border-kirospirit italic">
+                            De første 3 behandlinger vises på forsiden. Alle vises på behandlingssiden.
+                        </p>
+                        <h4 class="font-bold text-gray-700 mb-4 text-sm flex items-center">
+                            <i data-lucide="layout-grid" class="w-4 h-4 mr-2"></i> Aktive Behandlinger:
+                        </h4>
+                        <div id="admin-treatments-list"
+                            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pr-2 custom-scrollbar">
+                            <p class="text-gray-400 italic text-sm">Henter behandlinger...</p>
                         </div>
                     </div>
 
                     <!-- 2. Nyheder -->
-                    <div class="bg-white p-8 rounded-2xl shadow-lg">
-                        <h3 class="text-2xl font-bold mb-4 text-gray-800">Nyheder</h3>
-                        <div class="mb-6">
-                            <label class="block text-sm font-semibold mb-2">Visning på forsiden:</label>
+                    <div class="bg-white p-8 rounded-2xl shadow-lg border-t-4 border-kirospirit">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-2xl font-bold text-gray-800">Nyheder</h3>
+                            <button onclick="window.openNewsModal()"
+                                class="bg-kirospirit text-white px-5 py-2 rounded-full font-bold hover:opacity-90 flex items-center">
+                                <i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i> Opret Nyhed
+                            </button>
+                        </div>
+                        <div class="mb-6 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                            <label class="block text-xs font-bold uppercase text-gray-500 mb-2">Visning på
+                                forsiden:</label>
                             <select id="layout-control" onchange="window.updateNewsLayout(this.value)"
-                                class="w-full p-2 border rounded-lg">
+                                class="w-full p-2 border rounded-lg bg-white shadow-sm">
                                 <option value="1">1 Kolonne</option>
                                 <option value="2">2 Kolonner</option>
                                 <option value="3">3 Kolonner</option>
                             </select>
                         </div>
-                        <button onclick="window.openNewsModal()"
-                            class="w-full bg-kirospirit text-white px-4 py-3 rounded-lg font-bold hover:opacity-90 flex justify-center items-center mb-4">
-                            <i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i> Opret Nyhed
-                        </button>
-                        <h4 class="font-bold text-gray-700 mb-2">Aktive Opslag:</h4>
-                        <ul id="news-list" class="space-y-2 max-h-60 overflow-y-auto">
-                            <li class="text-gray-400 italic">Ingen opslag.</li>
+                        <h4 class="font-bold text-gray-700 mb-3 text-sm flex items-center">
+                            <i data-lucide="list" class="w-4 h-4 mr-2"></i> Aktive Opslag:
+                        </h4>
+                        <ul id="news-list" class="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+                            <li class="text-gray-400 italic text-sm">Ingen opslag.</li>
                         </ul>
                     </div>
 
                     <!-- 3. Anmeldelser -->
-                    <div class="bg-white p-8 rounded-2xl shadow-lg">
-                        <h3 class="text-2xl font-bold mb-4 text-gray-800">Anmeldelser</h3>
-                        <button onclick="window.openReviewModal()"
-                            class="w-full bg-kirospirit text-white px-4 py-3 rounded-lg font-bold hover:opacity-90 transition flex justify-center items-center mb-4">
-                            <i data-lucide="star" class="w-5 h-5 mr-2"></i> Tilføj Anmeldelse
-                        </button>
-                        <h4 class="font-bold text-gray-700 mb-2">Kundeudtalelser:</h4>
-                        <ul id="admin-reviews-list" class="space-y-2 max-h-60 overflow-y-auto">
-                            <li class="text-gray-400 italic">Ingen anmeldelser.</li>
+                    <div class="bg-white p-8 rounded-2xl shadow-lg border-t-4 border-kirospirit">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-2xl font-bold text-gray-800">Anmeldelser</h3>
+                            <button onclick="window.openReviewModal()"
+                                class="bg-kirospirit text-white px-5 py-2 rounded-full font-bold hover:opacity-90 flex items-center">
+                                <i data-lucide="star" class="w-5 h-5 mr-2"></i> Tilføj Anmeldelse
+                            </button>
+                        </div>
+                        <h4 class="font-bold text-gray-700 mb-3 text-sm flex items-center">
+                            <i data-lucide="message-square" class="w-4 h-4 mr-2"></i> Kundeudtalelser:
+                        </h4>
+                        <ul id="admin-reviews-list" class="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+                            <li class="text-gray-400 italic text-sm">Ingen anmeldelser.</li>
                         </ul>
                     </div>
 
                     <!-- 4. Tekster & Kontakt -->
-                    <div class="bg-white p-8 rounded-2xl shadow-lg lg:col-span-2">
-                        <h3 class="text-2xl font-bold mb-6 text-gray-800">Tekster & Kontaktinfo</h3>
+                    <div class="bg-white p-8 rounded-2xl shadow-lg lg:col-span-2 border-t-4 border-kirospirit">
+                        <div class="flex items-center mb-6">
+                            <h3 class="text-2xl font-bold text-gray-800">Tekster & Kontaktinfo</h3>
+                        </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div class="space-y-4">
                                 <h4 class="font-bold text-gray-500 uppercase text-xs">Forsidetekster</h4>
@@ -180,30 +199,43 @@
                     </div>
 
                     <!-- 5. Admins -->
-                    <div class="bg-red-50 p-8 rounded-2xl shadow-lg border border-red-100 lg:col-span-2">
-                        <h3 class="text-xl font-bold mb-4 text-red-700">Administratorer</h3>
-                        <div class="flex gap-4 mb-4">
-                            <input type="email" id="new-admin-email" placeholder="Ny admin email"
-                                class="flex-grow px-4 py-2 border rounded-lg">
+                    <div class="bg-white p-8 rounded-2xl shadow-lg border-t-4 border-red-500 lg:col-span-2">
+                        <h3 class="text-2xl font-bold mb-6 text-gray-800 flex items-center">
+                            <i data-lucide="shield-check" class="w-6 h-6 mr-2 text-red-500"></i> Administratorer
+                        </h3>
+                        <div
+                            class="flex flex-col sm:flex-row gap-4 mb-6 bg-red-50 p-4 rounded-xl border border-red-100">
+                            <input type="email" id="new-admin-email" placeholder="Indtast ny admin email"
+                                class="flex-grow px-4 py-3 border rounded-lg shadow-sm focus:ring-2 focus:ring-red-500 outline-none">
                             <button onclick="window.addAdmin()"
-                                class="bg-red-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-red-700">Tilføj</button>
+                                class="bg-red-600 text-white px-8 py-3 rounded-full font-bold hover:bg-red-700 transition shadow-md flex items-center justify-center">
+                                <i data-lucide="user-plus" class="w-5 h-5 mr-2"></i> Giv Adgang
+                            </button>
                         </div>
-                        <ul id="admin-list" class="space-y-2">
-                            <li class="text-gray-400">...</li>
+                        <h4 class="font-bold text-gray-700 mb-3 text-sm flex items-center">
+                            <i data-lucide="users" class="w-4 h-4 mr-2"></i> Aktive Administratorer:
+                        </h4>
+                        <ul id="admin-list" class="space-y-2 pr-2 custom-scrollbar">
+                            <li class="text-gray-400 italic text-sm">Indlæser...</li>
                         </ul>
                     </div>
 
-                    <!-- 6. Team / Personale (NY) -->
+                    <!-- 6. Team / Personale -->
                     <div class="bg-white p-8 rounded-2xl shadow-lg border-t-4 border-kirospirit lg:col-span-2">
                         <div class="flex justify-between items-center mb-6">
-                            <h3 class="text-2xl font-bold text-gray-800">Team / Personale</h3>
+                            <h3 class="text-2xl font-bold text-gray-800 flex items-center">
+                                <i data-lucide="users" class="w-6 h-6 mr-2 text-kirospirit"></i> Team / Personale
+                            </h3>
                             <button onclick="window.openStaffModal()"
-                                class="bg-kirospirit text-white px-5 py-2 rounded-full font-bold hover:opacity-90 flex items-center">
+                                class="bg-kirospirit text-white px-5 py-2 rounded-full font-bold hover:opacity-90 flex items-center shadow-md">
                                 <i data-lucide="user-plus" class="w-5 h-5 mr-2"></i> Tilføj Medarbejder
                             </button>
                         </div>
-                        <div id="admin-staff-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <p class="text-gray-400 italic">Henter personale...</p>
+                        <h4 class="font-bold text-gray-700 mb-4 text-sm flex items-center">
+                            <i data-lucide="contact-2" class="w-4 h-4 mr-2"></i> Medarbejdere:
+                        </h4>
+                        <div id="admin-staff-list" class="grid grid-cols-1 md:grid-cols-2 gap-4 pr-2 custom-scrollbar">
+                            <p class="text-gray-400 italic text-sm">Henter personale...</p>
                         </div>
                     </div>
                 </div>
@@ -445,13 +477,20 @@
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-1">Bedømmelse (1-6 stjerner)</label>
-                    <div id="star-rating-container" class="star-rating flex flex-row text-2xl py-2" data-value="5">
-                        <i data-lucide="star" data-index="1"></i>
-                        <i data-lucide="star" data-index="2"></i>
-                        <i data-lucide="star" data-index="3"></i>
-                        <i data-lucide="star" data-index="4"></i>
-                        <i data-lucide="star" data-index="5"></i>
-                        <i data-lucide="star" data-index="6"></i>
+                    <div id="star-rating-container" class="star-rating flex flex-row text-4xl py-2 gap-2 cursor-pointer"
+                        data-value="5">
+                        <span data-index="1" class="transition hover:scale-110"><i data-lucide="star"
+                                class="pointer-events-none"></i></span>
+                        <span data-index="2" class="transition hover:scale-110"><i data-lucide="star"
+                                class="pointer-events-none"></i></span>
+                        <span data-index="3" class="transition hover:scale-110"><i data-lucide="star"
+                                class="pointer-events-none"></i></span>
+                        <span data-index="4" class="transition hover:scale-110"><i data-lucide="star"
+                                class="pointer-events-none"></i></span>
+                        <span data-index="5" class="transition hover:scale-110"><i data-lucide="star"
+                                class="pointer-events-none"></i></span>
+                        <span data-index="6" class="transition hover:scale-110"><i data-lucide="star"
+                                class="pointer-events-none"></i></span>
                     </div>
                 </div>
                 <div>
@@ -602,7 +641,7 @@
             }, 3000);
         });
     </script>
-    <script type="module" src="assets/js/app.js?v=fixed6"></script>
+    <script type="module" src="assets/js/app.js?v=fixed12"></script>
 </body>
 
 </html>

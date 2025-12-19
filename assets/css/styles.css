@@ -176,3 +176,27 @@ select {
     background-color: white !important;
     border: 1px solid #d1d5db;
 }
+
+/* Interactive Star Rating */
+.star-rating {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.star-rating i {
+    color: #d1d5db;
+    /* Default gray */
+    transition: color 0.2s ease-in-out, transform 0.1s;
+}
+
+.star-rating i:hover {
+    transform: scale(1.2);
+}
+
+.star-rating i.active,
+.star-rating i.hover {
+    color: #fbbf24;
+    /* Gold/Yellow */
+}

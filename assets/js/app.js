@@ -3,7 +3,7 @@ import { doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebase
 import { app, auth, db, PORTS, INITIAL_CONTENT } from './config.js';
 import * as Auth from './auth.js';
 import * as DB from './db.js';
-import * as UI from './ui.js?v=fixed4';
+import * as UI from './ui.js?v=fixed6';
 
 // Global Stater (can be kept here or moved to respective modules)
 let currentNewsId = null;
@@ -138,11 +138,47 @@ function attachWindowFunctions() {
         try { await updateDoc(doc(db, PORTS.CONTENT_DOC), { news_layout_cols: cols }); setupContentListeners(); } catch (e) { }
     };
 
+    // Helper for star rating UI
+    const updateStarRatingUI = (container, value) => {
+        container.dataset.value = value;
+        const stars = container.querySelectorAll('i');
+        stars.forEach((star, idx) => {
+            if (idx < value) {
+                star.classList.add('active');
+            } else {
+                star.classList.remove('active');
+            }
+        });
+    };
+
     // Reviews
     window.openReviewModal = (item) => {
         currentReviewId = item ? item.id : null;
         document.getElementById('review-name').value = item ? item.name : '';
-        document.getElementById('review-stars').value = item ? item.stars : '5';
+
+        const starContainer = document.getElementById('star-rating-container');
+        const starValue = item ? item.stars : 5;
+        updateStarRatingUI(starContainer, starValue);
+
+        // Add listeners to stars if not already added
+        if (!starContainer.dataset.listenersAdded) {
+            const stars = starContainer.querySelectorAll('i');
+            stars.forEach((star, idx) => {
+                const val = idx + 1;
+                star.onclick = () => updateStarRatingUI(starContainer, val);
+                star.onmouseover = () => {
+                    stars.forEach((s, sIdx) => {
+                        if (sIdx < val) s.classList.add('hover');
+                        else s.classList.remove('hover');
+                    });
+                };
+                star.onmouseout = () => {
+                    stars.forEach(s => s.classList.remove('hover'));
+                };
+            });
+            starContainer.dataset.listenersAdded = "true";
+        }
+
         document.getElementById('review-duration').value = item ? (item.duration || 5) : '5';
         document.getElementById('review-text').value = item ? item.text : '';
 
@@ -165,7 +201,7 @@ function attachWindowFunctions() {
     window.closeReviewModal = () => document.getElementById('review-modal').classList.add('hidden');
     window.saveReviewItem = async () => {
         const name = document.getElementById('review-name').value;
-        const stars = document.getElementById('review-stars').value;
+        const stars = document.getElementById('star-rating-container').dataset.value;
         const duration = document.getElementById('review-duration').value;
         const text = document.getElementById('review-text').value;
         const data = {

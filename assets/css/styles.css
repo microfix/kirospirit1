@@ -1,0 +1,178 @@
+:root {
+    --primary-color: #0d9488;
+    --secondary-color: #2dd4bf;
+    --bg-color: #f0fdfa;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: white;
+    scroll-behavior: smooth;
+}
+
+.text-kirospirit {
+    color: var(--primary-color);
+}
+
+.bg-kirospirit {
+    background-color: var(--primary-color);
+}
+
+.hover-kirospirit:hover {
+    background-color: var(--secondary-color);
+}
+
+.hero-bg {
+    background-image: url('https://kirospirit.dk/wp-content/uploads/2025/01/DSC05145-2048x1365.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+/* Side Navigation */
+.page-section {
+    display: none;
+}
+
+.page-section.active {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+#hjem-hero {
+    min-height: 650px;
+}
+
+/* Admin Styles */
+.admin-edit {
+    border: 2px dashed #fcd34d;
+    padding: 0.5rem;
+    margin: 0.25rem 0;
+    cursor: pointer;
+    color: #1f2937;
+    background-color: white;
+}
+
+.admin-edit:hover {
+    border-color: #f59e0b;
+}
+
+/* Video Container */
+.aspect-ratio-box {
+    position: relative;
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+    background-color: #f3f4f6;
+}
+
+.aspect-ratio-box iframe,
+.aspect-ratio-box video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    border: 0;
+}
+
+/* Review Animation Styles */
+.review-slide-enter {
+    animation: slideInRight 0.8s forwards;
+}
+
+.review-slide-exit {
+    animation: slideOutLeft 0.8s forwards;
+}
+
+@keyframes slideInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutLeft {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(-100px);
+    }
+}
+
+/* Icon Picker Grid */
+#icon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+}
+
+.icon-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.icon-option:hover {
+    background-color: #f0fdfa;
+    color: var(--primary-color);
+}
+
+.icon-option.selected {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.icon-option i {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 4px;
+}
+
+.icon-option span {
+    font-size: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    text-align: center;
+}
+
+/* Tving inputfarver */
+input,
+textarea,
+select {
+    color: #1f2937 !important;
+    background-color: white !important;
+    border: 1px solid #d1d5db;
+}
